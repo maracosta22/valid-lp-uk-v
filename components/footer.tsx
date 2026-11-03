@@ -116,13 +116,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-center justify-between gap-6 border-t border-card/15 pt-10 sm:flex-row sm:items-start">
-          <address className="flex flex-col items-center gap-1 text-center text-xs not-italic leading-relaxed text-card/60 sm:items-start sm:text-left">
-            <span className="font-semibold text-card">EARTH &amp; AIR WOOD, LLC</span>
-            <span>EIN: 86-3245108</span>
-            <span>Director: Amber Johnson</span>
-            <span>411 Fairgreen Ave, Casselberry, FL 32707</span>
-          </address>
+        <div className="mt-16 flex justify-center border-t border-card/15 pt-10 sm:justify-end">
           <div className="flex gap-6">
             <Link href="/privacy" className="text-sm text-card/70 hover:text-card">
               Privacy Policy
