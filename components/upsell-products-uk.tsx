@@ -2,6 +2,7 @@
 
 import { Plus, Check } from "lucide-react"
 import Image from "next/image"
+import { christmasCartId, getChristmasProduct } from "@/lib/christmas"
 
 const LED_KIT_IMAGE = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/LED0101-NcQN4b3GARfX7EQhQSIcnMbQB9NsFa.jpg"
 const GLUE_IMAGE = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/CLEAN04-jsHtrQ87vwg45Qyo5RrSkzrJbV2MXC.jpg"
@@ -13,6 +14,7 @@ export interface UpsellProduct {
   price: number
   originalPrice?: number
   image: string
+  href?: string
 }
 
 export const UPSELL_PRODUCTS_UK: UpsellProduct[] = [
@@ -34,7 +36,32 @@ export const UPSELL_PRODUCTS_UK: UpsellProduct[] = [
   },
 ]
 
+const CHRISTMAS_UPSELLS: { slug: string; description: string }[] = [
+  { slug: "velvet-bow-decoration", description: "Plush rust velvet bow for the tree or door" },
+  { slug: "real-winter-berry-wreath", description: "Real berries and foliage for your front door" },
+]
+
+export const CHRISTMAS_UPSELL_PRODUCTS_UK: UpsellProduct[] = CHRISTMAS_UPSELLS.flatMap(({ slug, description }) => {
+  const product = getChristmasProduct(slug)
+  if (!product || product.price === null) return []
+  return [
+    {
+      id: christmasCartId(slug),
+      name: product.name,
+      description,
+      price: product.price,
+      image: product.images[0],
+      href: `/christmas/${slug}`,
+    },
+  ]
+})
+
+export function getUpsellProductsUk(mainProductId: string | undefined): UpsellProduct[] {
+  return mainProductId?.startsWith("xmas-") ? CHRISTMAS_UPSELL_PRODUCTS_UK : UPSELL_PRODUCTS_UK
+}
+
 interface UpsellProductsUkProps {
+  products?: UpsellProduct[]
   onAddProduct?: (product: UpsellProduct) => void
   onRemoveProduct?: (productId: string) => void
   selectedProducts?: string[]
@@ -42,6 +69,7 @@ interface UpsellProductsUkProps {
 }
 
 export function UpsellProductsUk({ 
+  products = UPSELL_PRODUCTS_UK,
   onAddProduct, 
   onRemoveProduct, 
   selectedProducts = [],
@@ -67,7 +95,7 @@ export function UpsellProductsUk({
 
       {/* Products */}
       <div className="space-y-3">
-        {UPSELL_PRODUCTS_UK.map((product) => {
+        {products.map((product) => {
           const isSelected = selectedProducts.includes(product.id)
           
           return (
@@ -94,7 +122,19 @@ export function UpsellProductsUk({
               {/* Product Info */}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground leading-tight">
-                  {product.name}
+                  {product.href ? (
+                    <a
+                      href={product.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+                    >
+                      {product.name}
+                    </a>
+                  ) : (
+                    product.name
+                  )}
                 </p>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   {product.description}
