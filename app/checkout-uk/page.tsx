@@ -12,7 +12,7 @@ import { trackInitiateCheckout as trackMetaInitiateCheckout, generateEventId } f
 import { trackInitiateCheckout as trackTikTokInitiateCheckout, formatCartForTikTok } from "@/lib/tiktok-events"
 import { getFbpFbc } from "@/lib/fbp-fbc"
 import { getStoredUTMs } from "@/lib/utm-client"
-import { UpsellProductsUk, UPSELL_PRODUCTS_UK, type UpsellProduct } from "@/components/upsell-products-uk"
+import { UpsellProductsUk, getUpsellProductsUk, type UpsellProduct } from "@/components/upsell-products-uk"
 
 // Shape that comes from sessionStorage
 interface StoredOrder {
@@ -51,9 +51,11 @@ export default function CheckoutUKPage() {
   const [selectedUpsells, setSelectedUpsells] = useState<string[]>([])
   const [checkoutStarted, setCheckoutStarted] = useState(false)
 
+  const upsellProducts = getUpsellProductsUk(storedOrder?.productId)
+
   // Calculate upsell total
   const upsellTotal = selectedUpsells.reduce((sum, id) => {
-    const product = UPSELL_PRODUCTS_UK.find(p => p.id === id)
+    const product = upsellProducts.find(p => p.id === id)
     return sum + (product?.price || 0)
   }, 0)
 
@@ -173,7 +175,7 @@ export default function CheckoutUKPage() {
     })),
     // Add selected upsell products
     ...selectedUpsells.map(id => {
-      const upsellProduct = UPSELL_PRODUCTS_UK.find(p => p.id === id)
+      const upsellProduct = upsellProducts.find(p => p.id === id)
       if (!upsellProduct) return null
       return {
         product: {
@@ -268,6 +270,7 @@ export default function CheckoutUKPage() {
         {!checkoutStarted && (
           <UpsellProductsUk 
             className="mb-4" 
+            products={upsellProducts}
             onAddProduct={handleAddUpsell}
             onRemoveProduct={handleRemoveUpsell}
             selectedProducts={selectedUpsells}
@@ -447,7 +450,7 @@ export default function CheckoutUKPage() {
             {selectedUpsells.length > 0 && (
               <>
                 {selectedUpsells.map(id => {
-                  const product = UPSELL_PRODUCTS_UK.find(p => p.id === id)
+                  const product = upsellProducts.find(p => p.id === id)
                   if (!product) return null
                   return (
                     <div key={id} className="flex justify-between text-sm">
