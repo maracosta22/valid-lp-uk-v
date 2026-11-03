@@ -6,6 +6,7 @@ import { CHRISTMAS_ORDER_BY, christmasCategories, christmasProducts, getChristma
 import { ChristmasGallery } from "@/components/christmas/christmas-gallery"
 import { ChristmasBuyBox } from "@/components/christmas/christmas-buy-box"
 import { ChristmasProductCard } from "@/components/christmas/christmas-product-card"
+import { ChristmasReviews } from "@/components/christmas/christmas-reviews"
 import {
   ChristmasFaq,
   ChristmasHighlights,
@@ -138,6 +139,7 @@ export default async function ChristmasProductPage({ params }: { params: Promise
         {product.loveIt && <ChristmasLoveIt items={product.loveIt} />}
         <ChristmasStepsAndSpecs product={product} />
         {product.pairWithPanel && <ChristmasPairWithPanel />}
+        {product.category === "trees" && <ChristmasReviews />}
 
         {related.length > 0 && (
           <section aria-labelledby="related" className="flex flex-col gap-6">
