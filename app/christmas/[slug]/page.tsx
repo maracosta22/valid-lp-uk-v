@@ -123,9 +123,9 @@ export default async function ChristmasProductPage({ params }: { params: Promise
             <h2 id="also-bought" className="font-serif text-3xl sm:text-4xl">
               Others also bought
             </h2>
-            <ul className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:gap-6">
-              {alsoBought.map((p) => (
-                <li key={p.slug} className="w-40 shrink-0 snap-start sm:w-auto">
+<ul className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
+          {alsoBought.map((p) => (
+            <li key={p.slug} className="min-w-0">
                   <Link href={`/christmas/${p.slug}`} className="block">
                     <ChristmasProductCard product={p} />
                   </Link>

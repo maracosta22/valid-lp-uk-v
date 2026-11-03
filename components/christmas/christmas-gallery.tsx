@@ -76,16 +76,16 @@ export function ChristmasGallery({
         )}
       </div>
       {media.length > 1 && (
-        <ul className="flex gap-2 overflow-x-auto" aria-label="Product media">
+        <ul className="flex gap-2" aria-label="Product media">
           {media.map((m, i) => (
-            <li key={m.src} className="shrink-0">
+            <li key={m.src} className="min-w-0 flex-1 sm:max-w-20">
               <button
                 type="button"
                 onClick={() => setActive(i)}
                 aria-label={m.type === "video" ? "Play video" : `Show photo ${i + 1}`}
                 aria-current={i === active}
                 className={cn(
-                  "relative block size-16 overflow-hidden rounded-md border-2 bg-muted transition-colors sm:size-20",
+                  "relative block aspect-square w-full overflow-hidden rounded-md border-2 bg-muted transition-colors",
                   i === active ? "border-foreground" : "border-transparent opacity-70 hover:opacity-100",
                 )}
               >
