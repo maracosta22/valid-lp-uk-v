@@ -74,10 +74,10 @@ export default async function ChristmasProductPage({ params }: { params: Promise
             </ol>
           </nav>
 
-          <div className="grid gap-8 lg:grid-cols-2 lg:gap-14">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14 [&>*]:min-w-0">
             <ChristmasGallery images={product.images} name={product.name} />
 
-            <div className="flex flex-col gap-6">
+            <div className="flex min-w-0 flex-col gap-6">
               <div className="flex flex-col items-start gap-4">
                 {category && (
                   <p className="rounded-full bg-accent/10 px-3 py-1.5 text-xs font-semibold text-accent">
