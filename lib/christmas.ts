@@ -20,6 +20,8 @@ export interface ChristmasProduct {
   details?: string[]
   /** Optional per-value prices (same order as `values`). Overrides `price` when selected. */
   options?: { label: string; values: string[]; prices?: number[] }
+  /** Products offered as optional add-ons next to the buy button. */
+  bundleWith?: { slug: string; optionIndex?: number }[]
 }
 
 export const christmasCategories: ChristmasCategory[] = [
@@ -62,7 +64,8 @@ export const christmasProducts: ChristmasProduct[] = [
     details: ["Height: 2ft", "Hand-woven natural rattan", "Tiered scalloped design", "Colour: Natural"],
   }),
   item("8ft Pre Lit Grand Fir Christmas Tree", "trees", {
-    price: 350,
+    price: 30.5,
+    bundleWith: [{ slug: "scallop-rattan-tree-skirt", optionIndex: 0 }, { slug: "light-up-bristle-treescape-decoration" }],
     images: photos("8ft-pre-lit-grand-fir-tree", 4),
     description:
       "Standing at an impressive 8ft tall, this Grand Fir Christmas tree brings instant festive impact to your home. It's pre-lit with 2,000 LED lights, expertly arranged on memory wire for effortless styling year after year. The lights can be set to either warm white or multi-coloured, with eight light settings, plus a foot pedal and remote control for easy operation. A quick-connect power pole and sturdy metal stand ensure fast, hassle-free assembly.",
