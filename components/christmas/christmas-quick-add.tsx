@@ -43,15 +43,21 @@ export function ChristmasQuickAdd({ product, className }: { product: ChristmasPr
       onClick={handleAdd}
       aria-label={`Add ${product.name} to cart`}
       className={cn(
-        "flex size-8 items-center justify-center rounded-full border border-foreground/20 text-foreground transition-colors hover:border-foreground hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "flex h-9 w-full items-center justify-center gap-1.5 rounded-full border border-foreground/20 text-sm font-medium text-foreground transition-colors hover:border-foreground hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         added && "border-foreground bg-foreground text-background",
         className,
       )}
     >
       {added ? (
-        <Check className="size-4" aria-hidden="true" />
+        <>
+          <Check className="size-4" aria-hidden="true" />
+          <span>Added</span>
+        </>
       ) : (
-        <Plus className="size-4" aria-hidden="true" />
+        <>
+          <Plus className="size-4" aria-hidden="true" />
+          <span>Add</span>
+        </>
       )}
     </button>
   )

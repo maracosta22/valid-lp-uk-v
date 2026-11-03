@@ -127,11 +127,11 @@ export default async function ChristmasProductPage({ params }: { params: Promise
             </h2>
             <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
               {alsoBought.map((p) => (
-                <li key={p.slug} className="relative min-w-0">
-                  <Link href={`/christmas/${p.slug}`} className="block pr-10">
-                    <ChristmasProductCard product={p} />
-                  </Link>
-                  <ChristmasQuickAdd product={p} className="absolute bottom-0 right-0" />
+  <li key={p.slug} className="flex min-w-0 flex-col gap-3">
+  <Link href={`/christmas/${p.slug}`} className="block">
+  <ChristmasProductCard product={p} />
+  </Link>
+  <ChristmasQuickAdd product={p} className="mt-auto" />
                 </li>
               ))}
             </ul>
