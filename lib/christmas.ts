@@ -14,6 +14,10 @@ export interface ChristmasProduct {
   price: number | null
   /** Upper bound when the supplier only lists a price range. */
   priceMax?: number
+  /** Original price shown struck through next to `price`. */
+  compareAtPrice?: number
+  /** Short promo line shown with the struck-through price. */
+  offerLabel?: string
   /** Empty until supplier photos are added. */
   images: string[]
   /** Gallery video; `position` is 1-based (2 = right after the first photo). */
@@ -97,6 +101,8 @@ export const christmasProducts: ChristmasProduct[] = [
   }),
   item("8ft Pre Lit Grand Fir Christmas Tree", "trees", {
     price: 30.5,
+    compareAtPrice: 110,
+    offerLabel: "Black Friday special offer for new customers",
     bundleWith: [
       { slug: "scallop-rattan-tree-skirt", optionIndex: 0, short: "skirt", preselected: true },
       { slug: "light-up-bristle-treescape-decoration", short: "treescape" },

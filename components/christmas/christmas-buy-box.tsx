@@ -156,9 +156,22 @@ export function ChristmasBuyBox({ product, children }: { product: ChristmasProdu
 
   return (
     <div className="flex flex-col gap-6">
-      <p className="font-serif text-4xl" aria-live="polite">
-        {priceLabel ?? "Price coming soon"}
-      </p>
+      <div className="flex flex-col gap-2">
+        <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1" aria-live="polite">
+          <span className="font-serif text-4xl">{priceLabel ?? "Price coming soon"}</span>
+          {product.compareAtPrice && optionPrice === undefined && (
+            <span className="text-lg text-muted-foreground line-through">
+              <span className="sr-only">Was </span>
+              {formatGBP(product.compareAtPrice)}
+            </span>
+          )}
+        </p>
+        {product.compareAtPrice && product.offerLabel && optionPrice === undefined && (
+          <p className="w-fit rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
+            {product.offerLabel}
+          </p>
+        )}
+      </div>
 
       {children}
 
