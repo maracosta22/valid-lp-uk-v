@@ -67,8 +67,23 @@ const item = (
 export const christmasCartId = (slug: string, optionIndex?: number) =>
   optionIndex === undefined ? `xmas-${slug}` : `xmas-${slug}--${optionIndex}`
 
-const photos = (base: string, count: number) =>
-  Array.from({ length: count }, (_, i) => `/images/christmas/${base}-${i + 1}.avif`)
+const photos = (base: string, count: number, ext: "avif" | "webp" = "avif") =>
+  Array.from({ length: count }, (_, i) => `/images/christmas/${base}-${i + 1}.${ext}`)
+
+const treeBundle: ChristmasProduct["bundleWith"] = [
+  { slug: "scallop-rattan-tree-skirt", optionIndex: 0, short: "skirt", preselected: true },
+  { slug: "light-up-bristle-treescape-decoration", short: "treescape" },
+]
+
+const treeFaq = (power: string, setup: string): NonNullable<ChristmasProduct["faq"]> => [
+  {
+    q: "Will it arrive before Christmas?",
+    a: `Order by ${CHRISTMAS_ORDER_BY} for delivery before Christmas. You'll get a tracking link by email as soon as it ships.`,
+  },
+  { q: "Does it come with a UK plug?", a: power },
+  { q: "How long does it take to put up?", a: setup },
+  { q: "Can I return it?", a: "Yes. You have 30 days to return it if it isn't right for your home." },
+]
 
 export const christmasProducts: ChristmasProduct[] = [
   item("2ft Rattan Tree", "trees", {
@@ -119,6 +134,7 @@ export const christmasProducts: ChristmasProduct[] = [
     ],
     specs: [
       { label: "Height", value: "8ft (244 cm)" },
+      { label: "Width", value: "155 cm" },
       { label: "Lights", value: "2,000 LEDs on memory wire" },
       { label: "Light colours", value: "Warm white or multicolour" },
       { label: "Effects", value: "8, with remote control and foot pedal" },
@@ -138,7 +154,7 @@ export const christmasProducts: ChristmasProduct[] = [
       },
       { q: "Can I return it?", a: "Yes. You have 30 days to return it if it isn't right for your home." },
     ],
-    images: photos("8ft-pre-lit-grand-fir-tree", 4),
+    images: photos("8ft-pre-lit-grand-fir-tree", 6, "webp"),
     description:
       "Standing at an impressive 8ft tall, this Grand Fir Christmas tree brings instant festive impact to your home. It's pre-lit with 2,000 LED lights, expertly arranged on memory wire for effortless styling year after year. The lights can be set to either warm white or multi-coloured, with eight light settings, plus a foot pedal and remote control for easy operation. A quick-connect power pole and sturdy metal stand ensure fast, hassle-free assembly.",
     details: [
@@ -147,6 +163,196 @@ export const christmasProducts: ChristmasProduct[] = [
       "Warm white or multi-coloured settings",
       "8 light functions with foot pedal and remote control",
       "Quick-connect power pole and metal stand",
+      "Mains powered",
+      "Colour: Green",
+    ],
+  }),
+  item("Green Grand Fir 7ft PreLit Christmas Tree", "trees", {
+    price: 120.99,
+    bundleWith: treeBundle,
+    buyLabel: "tree",
+    bundleTitle: "Complete the tree",
+    pairWithPanel: true,
+    tagline:
+      "A dense, luxury Grand Fir with 3,049 lifelike tips and 700 lights that answer to your voice. Full enough to fill a corner, easy enough to put up in an evening.",
+    highlights: [
+      { icon: "height", label: "7ft tall" },
+      { icon: "tree", label: "3,049 tips" },
+      { icon: "lights", label: "700 voice-activated lights" },
+      { icon: "remote", label: "Remote, 8 functions" },
+    ],
+    loveIt: [
+      {
+        icon: "tree",
+        title: "Full, lifelike branches",
+        body: "3,049 PE and PVC tips give a dense, realistic evergreen silhouette with no gaps to hide.",
+      },
+      {
+        icon: "lights",
+        title: "Lights that listen",
+        body: "700 pre-lit lights switch on and change by voice, so there's no crawling behind the tree for the plug.",
+      },
+      {
+        icon: "remote",
+        title: "Eight light functions",
+        body: "Pick a steady glow or a gentle twinkle from the remote, then leave it for the evening.",
+      },
+    ],
+    steps: [
+      { title: "Set up the stand", body: "Open the stand and place it where the tree will go." },
+      { title: "Stack the sections", body: "Slot the sections together; the lights are already in place." },
+      { title: "Plug in and shape", body: "Switch on, choose a light function and fluff the branches into shape." },
+    ],
+    specs: [
+      { label: "Height", value: "7ft (210 cm)" },
+      { label: "Width × depth", value: "134.5 × 135 cm" },
+      { label: "Branch tips", value: "3,049 PE and PVC" },
+      { label: "Lights", value: "700, voice-activated" },
+      { label: "Functions", value: "8, with remote control" },
+      { label: "Power", value: "Mains, UK plug" },
+      { label: "Use", value: "Indoor only" },
+      { label: "Colour", value: "Green" },
+    ],
+    faq: treeFaq(
+      "Yes. The tree is mains powered and comes ready to plug into a standard UK socket.",
+      "Not long. It's designed for easy assembly: open the stand, slot the sections together and switch on.",
+    ),
+    images: photos("7ft-grand-fir-tree", 4, "webp"),
+    description:
+      "Transform your living space for the festive season with this 7ft luxury Grand Fir artificial Christmas tree. Crafted with 3,049 PE and PVC branch tips, it offers a dense, realistic evergreen silhouette. It comes pre-lit with 700 voice-activated lights and eight light settings controlled by remote for quick, hassle-free assembly.",
+    details: [
+      "Height: 7ft (210 cm)",
+      "Width 134.5 cm, depth 135 cm",
+      "3,049 PE and PVC tips for a full, lifelike appearance",
+      "700 voice-activated lights with remote control",
+      "8 light functions",
+      "Easy assembly",
+      "Mains operated",
+      "Suitable for indoor use only",
+    ],
+  }),
+  item("Laura Ashley Green 6ft Pre Lit Frosted Christmas Tree", "trees", {
+    price: 67.9,
+    bundleWith: treeBundle,
+    buyLabel: "tree",
+    bundleTitle: "Complete the tree",
+    pairWithPanel: true,
+    tagline:
+      "Snow-dusted pine, real-looking pinecones and red berries, with warm micro LEDs already woven in. A classic English country Christmas sized for snug rooms.",
+    highlights: [
+      { icon: "height", label: "6ft tall" },
+      { icon: "lights", label: "250 micro LEDs" },
+      { icon: "colours", label: "Frosted, pinecones & berries" },
+      { icon: "tree", label: "501 tips" },
+    ],
+    loveIt: [
+      {
+        icon: "colours",
+        title: "Already decorated",
+        body: "Snow frosting, pinecones and vibrant red berries are part of the tree, so it looks styled before you add a single bauble.",
+      },
+      {
+        icon: "lights",
+        title: "No tangled lights",
+        body: "250 warm, twinkling micro LEDs are woven through the foliage. Plug in and go straight to styling.",
+      },
+      {
+        icon: "height",
+        title: "Made for smaller spaces",
+        body: "At 109 cm wide it fits living rooms, hallways and dining corners without taking over.",
+      },
+    ],
+    steps: [
+      { title: "Set up the stand", body: "Open the sturdy dark metal stand where the tree will go." },
+      { title: "Fit the sections", body: "Slot the sections together; the lights are already in place." },
+      { title: "Plug in and shape", body: "Switch on and fluff the frosted branches into shape." },
+    ],
+    specs: [
+      { label: "Height", value: "6ft (180 cm)" },
+      { label: "Width × depth", value: "109 × 109 cm" },
+      { label: "Branch tips", value: "501" },
+      { label: "Lights", value: "250 warm micro LEDs" },
+      { label: "Cable", value: "200 cm, green" },
+      { label: "Timer / dimmable", value: "No / No" },
+      { label: "Power", value: "Mains, plugged" },
+      { label: "Weight", value: "5.8 kg" },
+      { label: "Use", value: "Indoor only" },
+    ],
+    faq: treeFaq(
+      "Yes. It's a plugged, mains-powered tree with a 200 cm green cable that blends into the branches.",
+      "Assembly is required, but it's quick: fit the sections onto the metal stand, plug in and shape the branches.",
+    ),
+    images: photos("6ft-frosted-tree", 6, "webp"),
+    description:
+      "Bringing festive warmth and rustic, winter-woodland charm to smaller spaces, the Laura Ashley Green 6ft Pre Lit Frosted Christmas Tree creates an enchanting seasonal focal point. It features full pine branches beautifully dusted with snow frosting and dotted with realistic pinecones and vibrant red berries. Pre-lit with warm, twinkling micro LEDs woven throughout the foliage, it eliminates the tangle of lights so you can jump straight to styling your tree. Complete with a sturdy dark metal stand, it brings a cosy, classic English country Christmas feel to snug living rooms, hallways or dining corners.",
+    details: [
+      "Height: 6ft (180 cm)",
+      "Width 109 cm, depth 109 cm",
+      "Snow-frosted branches with pinecones and red berries",
+      "Pre-lit with 250 warm micro LEDs",
+      "501 tips",
+      "Sturdy dark metal stand",
+      "Cable length 200 cm, green",
+      "Weight 5.8 kg",
+      "Indoor use only",
+    ],
+  }),
+  item("Laura Ashley Green 7ft Pre Lit Dew Drop Christmas Tree", "trees", {
+    price: 230,
+    bundleWith: treeBundle,
+    buyLabel: "tree",
+    bundleTitle: "Complete the tree",
+    pairWithPanel: true,
+    tagline:
+      "Faux pine cones and dewy droplets catch the light from 450 built-in LEDs. Set it up, plug it in and enjoy a warm, twinkling glow.",
+    highlights: [
+      { icon: "height", label: "7ft tall" },
+      { icon: "lights", label: "450 LEDs" },
+      { icon: "colours", label: "Dew drops & pine cones" },
+      { icon: "tree", label: "122 cm diameter" },
+    ],
+    loveIt: [
+      {
+        icon: "colours",
+        title: "Dewy, sparkling foliage",
+        body: "Faux pine cones and droplets on every branch create an enchanting, frosted-morning look.",
+      },
+      {
+        icon: "lights",
+        title: "No string lights needed",
+        body: "450 LED lights are built in. Set the tree up, plug it in and it's ready.",
+      },
+      {
+        icon: "tree",
+        title: "Timeless sophistication",
+        body: "A full 7ft silhouette that suits classic and modern rooms alike.",
+      },
+    ],
+    steps: [
+      { title: "Set up the stand", body: "Open the stand and place it where the tree will go." },
+      { title: "Stack the sections", body: "Slot the sections together; the lights are already in place." },
+      { title: "Plug in and shape", body: "Switch on and fluff the branches into shape." },
+    ],
+    specs: [
+      { label: "Height", value: "7ft (210 cm)" },
+      { label: "Diameter", value: "122 cm" },
+      { label: "Lights", value: "450 LEDs, pre-lit" },
+      { label: "Decoration", value: "Faux pine cones and dew drops" },
+      { label: "Power", value: "Mains, UK plug" },
+      { label: "Colour", value: "Green" },
+    ],
+    faq: treeFaq(
+      "Yes. The tree is mains powered and comes ready to plug into a standard UK socket.",
+      "Not long. Set up the stand, slot the sections together and plug in. There are no string lights to add.",
+    ),
+    images: photos("7ft-dew-drop-tree", 4, "webp"),
+    description:
+      "Elevate your holiday decor with this Laura Ashley pre-lit 7ft tree. Its faux foliage sparkles with lights and is adorned with faux pine cones and dewy droplets, creating an enchanting, festive scene. With no need for string lights, simply set the tree up, plug it in, and enjoy the warm, twinkling ambiance that fills your home with timeless sophistication.",
+    details: [
+      "Height: 7ft (210 cm)",
+      "Diameter: 122 cm",
+      "Pre-lit with 450 LED lights",
+      "Faux pine cones and dew drops",
       "Mains powered",
       "Colour: Green",
     ],
