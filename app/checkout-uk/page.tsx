@@ -24,6 +24,7 @@ interface StoredOrder {
   image: string
   currency: string
   ledFree?: boolean   // true when total >= £85 (Kit LED included)
+  extras?: { productId: string; name: string; price: number; quantity: number; image: string }[]
 }
 
 interface BonusData {
@@ -122,7 +123,9 @@ export default function CheckoutUKPage() {
   // Early Black Friday bundles: same calculation the server uses at checkout
   const bundleQuote = quoteBundle(Math.round(unitPrice * 100), orderQuantity)
   const productTotal = bundleQuote.totalCents / 100
-  const totalGBP = productTotal + upsellTotal
+  const extras = storedOrder.extras ?? []
+  const extrasTotal = extras.reduce((sum, e) => sum + e.price * e.quantity, 0)
+  const totalGBP = productTotal + upsellTotal + extrasTotal
   const isFreeShipping = totalGBP >= 80
   
   // Handler to update quantity
@@ -156,6 +159,18 @@ export default function CheckoutUKPage() {
       } as any,
       quantity: orderQuantity,
     },
+    ...extras.map((e) => ({
+      product: {
+        id: e.productId,
+        name: e.name,
+        price: e.price,
+        salePrice: e.price,
+        currency: "GBP" as const,
+        image: e.image,
+        images: [e.image],
+      } as any,
+      quantity: e.quantity,
+    })),
     // Add selected upsell products
     ...selectedUpsells.map(id => {
       const upsellProduct = UPSELL_PRODUCTS_UK.find(p => p.id === id)
@@ -421,6 +436,14 @@ export default function CheckoutUKPage() {
                 <span className="text-green-600 font-semibold">FREE</span>
               </div>
             )}
+            {extras.map((e) => (
+              <div key={e.productId} className="flex justify-between text-sm">
+                <span className="text-muted-foreground">
+                  {e.name} x{e.quantity}
+                </span>
+                <span>£{(e.price * e.quantity).toFixed(2)}</span>
+              </div>
+            ))}
             {selectedUpsells.length > 0 && (
               <>
                 {selectedUpsells.map(id => {

@@ -1,13 +1,47 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { RotateCcw, Shield, ShoppingCart, Truck } from "lucide-react"
+import { Check, RotateCcw, Shield, ShoppingCart, Truck } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 import { useToast } from "@/hooks/use-toast"
-import { christmasCartId, formatGBP, formatPriceRange, type ChristmasProduct } from "@/lib/christmas"
+import {
+  christmasCartId,
+  formatGBP,
+  formatPriceRange,
+  getChristmasProduct,
+  type ChristmasProduct,
+} from "@/lib/christmas"
 
 const MAX_QUANTITY = 99
+
+interface Companion {
+  id: string
+  name: string
+  price: number
+  image: string
+  product: ChristmasProduct
+}
+
+function resolveCompanions(product: ChristmasProduct): Companion[] {
+  return (product.bundleWith ?? []).flatMap(({ slug, optionIndex }) => {
+    const p = getChristmasProduct(slug)
+    if (!p) return []
+    const price = optionIndex !== undefined ? p.options?.prices?.[optionIndex] : p.price
+    if (price === null || price === undefined) return []
+    const optionValue = optionIndex !== undefined ? p.options?.values[optionIndex] : undefined
+    return [
+      {
+        id: christmasCartId(slug, optionIndex),
+        name: optionValue ? `${p.name} – ${optionValue}` : p.name,
+        price,
+        image: p.images[0] ?? "",
+        product: p,
+      },
+    ]
+  })
+}
 
 export function ChristmasBuyBox({ product }: { product: ChristmasProduct }) {
   const router = useRouter()
@@ -22,8 +56,35 @@ export function ChristmasBuyBox({ product }: { product: ChristmasProduct }) {
   const available = unitPrice !== null && priceLabel !== null
   const totalPrice = unitPrice !== null ? unitPrice * quantity : 0
 
+  const companions = resolveCompanions(product)
+  const [companionIds, setCompanionIds] = useState<string[]>([])
+  const selectedCompanions = companions.filter((c) => companionIds.includes(c.id))
+  const companionsTotal = selectedCompanions.reduce((sum, c) => sum + c.price, 0)
+  const grandTotal = totalPrice + companionsTotal
+
+  const toggleCompanion = (id: string) =>
+    setCompanionIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
+
   const addToCart = () => {
     if (unitPrice === null) return null
+    for (const c of selectedCompanions) {
+      addItem(
+        {
+          id: c.id,
+          slug: c.product.slug,
+          name: c.name,
+          description: c.product.description ?? c.product.name,
+          longDescription: "",
+          price: c.price,
+          currency: "GBP",
+          category: "christmas",
+          images: c.product.images,
+          features: [],
+          inStock: true,
+        },
+        1,
+      )
+    }
     const hasOptionPrice = optionPrice !== undefined
     const optionValue = hasOptionPrice ? product.options?.values[selected] : undefined
     const id = christmasCartId(product.slug, hasOptionPrice ? selected : undefined)
@@ -69,6 +130,13 @@ export function ChristmasBuyBox({ product }: { product: ChristmasProduct }) {
           quantity,
           image: product.images[0] ?? "",
           currency: "GBP",
+          extras: selectedCompanions.map((c) => ({
+            productId: c.id,
+            name: c.name,
+            price: c.price,
+            quantity: 1,
+            image: c.image,
+          })),
         }),
       )
     } catch {}
@@ -101,6 +169,53 @@ export function ChristmasBuyBox({ product }: { product: ChristmasProduct }) {
               </label>
             ))}
           </div>
+        </fieldset>
+      )}
+
+      {companions.length > 0 && (
+        <fieldset className="flex flex-col gap-3 rounded-3xl border border-border bg-card/70 p-4 backdrop-blur">
+          <legend className="sr-only">Take it with</legend>
+          <p className="font-serif text-lg" aria-hidden="true">
+            Take it with
+          </p>
+          <ul className="flex flex-col gap-2">
+            {companions.map((c) => {
+              const checked = companionIds.includes(c.id)
+              return (
+                <li key={c.id}>
+                  <label
+                    className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-2 pr-3 transition-colors ${
+                      checked ? "border-primary bg-primary/5" : "border-border bg-background hover:border-foreground/40"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleCompanion(c.id)}
+                      className="peer sr-only"
+                    />
+                    <span className="relative size-14 shrink-0 overflow-hidden rounded-xl bg-muted">
+                      {c.image && (
+                        <Image src={c.image} alt={c.product.name} fill sizes="56px" className="object-cover" />
+                      )}
+                    </span>
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <span className="text-sm font-medium leading-snug">{c.name}</span>
+                      <span className="text-sm text-muted-foreground">+ {formatGBP(c.price)}</span>
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className={`flex size-6 shrink-0 items-center justify-center rounded-full border transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-ring ${
+                        checked ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background"
+                      }`}
+                    >
+                      {checked && <Check className="size-3.5" />}
+                    </span>
+                  </label>
+                </li>
+              )
+            })}
+          </ul>
         </fieldset>
       )}
 
@@ -148,7 +263,7 @@ export function ChristmasBuyBox({ product }: { product: ChristmasProduct }) {
           className="flex w-full items-center justify-center gap-3 rounded-full bg-primary px-8 py-4 text-lg font-semibold text-white transition-colors duration-200 hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50 rounded-full"
         >
           <ShoppingCart className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-          {available ? `Buy Now - £${totalPrice.toFixed(2)}` : "Coming soon"}
+          {available ? `Buy Now - £${grandTotal.toFixed(2)}` : "Coming soon"}
         </button>
 
         <p className="text-center text-xs text-muted-foreground">
