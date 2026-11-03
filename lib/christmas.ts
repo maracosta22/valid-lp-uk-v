@@ -16,6 +16,8 @@ export interface ChristmasProduct {
   priceMax?: number
   /** Empty until supplier photos are added. */
   images: string[]
+  /** Gallery video; `position` is 1-based (2 = right after the first photo). */
+  video?: { src: string; position?: number }
   description?: string
   details?: string[]
   /** Optional per-value prices (same order as `values`). Overrides `price` when selected. */
@@ -155,6 +157,7 @@ export const christmasProducts: ChristmasProduct[] = [
       { q: "Can I return it?", a: "Yes. You have 30 days to return it if it isn't right for your home." },
     ],
     images: photos("8ft-pre-lit-grand-fir-tree", 6, "webp"),
+    video: { src: "/videos/christmas/8ft-pre-lit-grand-fir-tree.mp4", position: 2 },
     description:
       "Standing at an impressive 8ft tall, this Grand Fir Christmas tree brings instant festive impact to your home. It's pre-lit with 2,000 LED lights, expertly arranged on memory wire for effortless styling year after year. The lights can be set to either warm white or multi-coloured, with eight light settings, plus a foot pedal and remote control for easy operation. A quick-connect power pole and sturdy metal stand ensure fast, hassle-free assembly.",
     details: [
