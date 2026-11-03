@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { BundleSelectorUK } from "@/components/bundle-selector-uk"
+import { formatGBP, quoteBundle } from "@/lib/checkout/offers"
 import { useRouter } from "next/navigation"
 import { useCart } from "@/lib/cart-context"
 import type { Product } from "@/lib/products"
@@ -325,7 +327,9 @@ export function AddToCartButton({ product, variant = "default", className, isFre
   // UK Flexible Acoustic Panel version: simple quantity selector + Add to Cart + Buy Now buttons
   if (isUKVersion) {
     const ukUnitPrice = product.salePrice || product.price
-    const ukTotalPrice = ukUnitPrice * quantity
+    // Early Black Friday bundles (display only; the server applies the same discount at checkout)
+    const ukQuote = quoteBundle(Math.round(ukUnitPrice * 100), quantity)
+    const ukTotalPrice = ukQuote.totalCents / 100
     
     const handleAddToCartOnly = () => {
       // Add to cart WITHOUT redirect - just add and show feedback
@@ -408,6 +412,8 @@ export function AddToCartButton({ product, variant = "default", className, isFre
     
     return (
       <div className="flex flex-col gap-3 w-full items-center">
+        <BundleSelectorUK unitCents={Math.round(ukUnitPrice * 100)} quantity={quantity} onQuantityChange={setQuantity} />
+
         {/* Simple quantity selector */}
         <div className="flex items-center justify-center">
           <div className="flex items-center border border-gray-300 rounded-xl overflow-hidden">
@@ -453,6 +459,12 @@ export function AddToCartButton({ product, variant = "default", className, isFre
           <ShoppingCart className="h-5 w-5 flex-shrink-0" />
           Buy Now - £{ukTotalPrice.toFixed(2)}
         </button>
+        {ukQuote.savingCents > 0 && (
+          <p className="text-sm text-muted-foreground text-center">
+            You save {formatGBP(ukQuote.savingCents)}
+            {ukQuote.gift && " plus a free Pro Fixing Adhesive"}
+          </p>
+        )}
       </div>
     )
   }

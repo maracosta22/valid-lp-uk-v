@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { BUNDLE_OFFER, quoteBundle } from "@/lib/checkout/offers"
 import { ArrowLeft, ArrowRight, ShoppingBag, AlertTriangle } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 import { CartItem } from "@/components/cart-item"
@@ -16,10 +17,17 @@ export default function CartUKPage() {
 
   // Filter to UK items only (GBP)
   const ukItems = items.filter((item) => item.product.currency === "GBP")
-  const ukTotalPrice = ukItems.reduce((sum, item) => {
+  const ukFullPrice = ukItems.reduce((sum, item) => {
     const price = item.product.salePrice || item.product.price
     return sum + price * item.quantity
   }, 0)
+  // Early Black Friday bundles: same calculation the server uses at checkout
+  const panelItems = ukItems.filter((item) => (BUNDLE_OFFER.productIds as readonly string[]).includes(item.product.id))
+  const panelQty = panelItems.reduce((n, item) => n + item.quantity, 0)
+  const firstPanel = panelItems[0]?.product as { price: number; salePrice?: number } | undefined
+  const panelUnit = firstPanel ? Math.round((firstPanel.salePrice || firstPanel.price) * 100) : 0
+  const bundleQuote = quoteBundle(panelUnit, panelQty)
+  const ukTotalPrice = ukFullPrice - bundleQuote.savingCents / 100
 
   const hasFlexiblePanel = ukItems.some((item) => item.product.slug === "flexible-acoustic-panel-uk")
   const currencyCode = "GBP"
@@ -134,8 +142,20 @@ export default function CartUKPage() {
               <div className="mt-6 space-y-4">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>{formatPrice(ukTotalPrice, currencyCode)}</span>
+                  <span>{formatPrice(ukFullPrice, currencyCode)}</span>
                 </div>
+                {bundleQuote.savingCents > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Bundle saving ({bundleQuote.percent}%)</span>
+                    <span className="font-semibold text-green-600">−{formatPrice(bundleQuote.savingCents / 100, currencyCode)}</span>
+                  </div>
+                )}
+                {bundleQuote.gift && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Pro Fixing Adhesive</span>
+                    <span className="font-semibold text-green-600">FREE</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping</span>
                   <span>{ukTotalPrice >= 80 ? "Free" : "Calculated at checkout"}</span>

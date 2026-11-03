@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import type Stripe from "stripe"
 import { CHECKOUT_SOURCE, getStripe } from "@/lib/stripe/server"
 import { absoluteImageUrl, CheckoutValidationError, isMarket, MARKETS, validateRequestedItems } from "@/lib/checkout/catalog"
+import { BUNDLE_OFFER, quoteBundle } from "@/lib/checkout/offers"
 import { getClientIpFromHeaders, getUserAgentFromHeaders } from "@/lib/meta/cookies"
 
 export const runtime = "nodejs"
@@ -39,6 +40,27 @@ export async function POST(request: NextRequest) {
 
   const { currency, shippingCountries, successPath, locale } = MARKETS[market]
 
+  // Early Black Friday bundles: the discount is applied HERE, on the server, from the
+  // validated base price. The browser always sends the normal price (£14.50).
+  const isPanel = (id: string) => (BUNDLE_OFFER.productIds as readonly string[]).includes(id)
+  const panelQty = market === "UK" ? lines.filter((l) => isPanel(l.id)).reduce((n, l) => n + l.quantity, 0) : 0
+  const panelBase = lines.find((l) => isPanel(l.id))?.unitCents ?? 0
+  const bundle = panelQty > 0 ? quoteBundle(panelBase, panelQty) : null
+  if (bundle && bundle.percent > 0) {
+    lines = lines.map((l) => (isPanel(l.id) ? { ...l, unitCents: bundle.unitCents } : l))
+    // A fixed pack price (e.g. 12 for £101.90) is not always divisible per panel: put the leftover
+    // pence on one panel, split into its own line, so Stripe charges exactly bundle.totalCents.
+    const remainder = bundle.totalCents - bundle.unitCents * panelQty
+    const idx = lines.findIndex((l) => isPanel(l.id))
+    if (remainder > 0 && idx >= 0) {
+      const line = lines[idx]
+      const extra = { ...line, quantity: 1, unitCents: line.unitCents + remainder }
+      lines = line.quantity > 1
+        ? [...lines.slice(0, idx), { ...line, quantity: line.quantity - 1 }, extra, ...lines.slice(idx + 1)]
+        : [...lines.slice(0, idx), extra, ...lines.slice(idx + 1)]
+    }
+  }
+
   let utms: Record<string, string> = {}
   try {
     utms = JSON.parse(request.cookies.get("_utm_data")?.value || "{}")
@@ -50,6 +72,8 @@ export async function POST(request: NextRequest) {
     market,
     items: JSON.stringify(lines.map((l) => [l.id, l.quantity, l.unitCents])).slice(0, 500),
   }
+  if (bundle && bundle.percent > 0) metadata.bundle_percent = String(bundle.percent)
+  if (bundle?.gift) metadata.free_gift = BUNDLE_OFFER.giftId
   const extra: Record<string, string | undefined> = {
     fbc: clip(request.cookies.get("_fbc")?.value),
     fbp: clip(request.cookies.get("_fbp")?.value),
@@ -91,7 +115,10 @@ export async function POST(request: NextRequest) {
       phone_number_collection: { enabled: true },
       return_url: `${origin}${successPath}?session_id={CHECKOUT_SESSION_ID}`,
       metadata,
-      payment_intent_data: { metadata: { source: CHECKOUT_SOURCE, market } },
+      payment_intent_data: { metadata: { source: CHECKOUT_SOURCE, market, ...(bundle?.gift ? { free_gift: BUNDLE_OFFER.giftId } : {}) } },
+      ...(bundle?.gift
+        ? { custom_text: { submit: { message: "Your free Pro Fixing Adhesive is included with this order." } } }
+        : {}),
     }
 
     let session: Stripe.Checkout.Session

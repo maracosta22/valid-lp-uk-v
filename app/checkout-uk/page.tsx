@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { formatGBP, quoteBundle } from "@/lib/checkout/offers"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -118,7 +119,9 @@ export default function CheckoutUKPage() {
 
   // Calculate total based on editable quantity + upsells
   const unitPrice = storedOrder.price
-  const productTotal = unitPrice * orderQuantity
+  // Early Black Friday bundles: same calculation the server uses at checkout
+  const bundleQuote = quoteBundle(Math.round(unitPrice * 100), orderQuantity)
+  const productTotal = bundleQuote.totalCents / 100
   const totalGBP = productTotal + upsellTotal
   const isFreeShipping = totalGBP >= 80
   
@@ -406,6 +409,18 @@ export default function CheckoutUKPage() {
               <span className="text-muted-foreground">{storedOrder.name} x{orderQuantity}</span>
               <span>£{productTotal.toFixed(2)}</span>
             </div>
+            {bundleQuote.savingCents > 0 && (
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Bundle saving ({bundleQuote.percent}%)</span>
+                <span className="text-green-600 font-semibold">−{formatGBP(bundleQuote.savingCents)}</span>
+              </div>
+            )}
+            {bundleQuote.gift && (
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Pro Fixing Adhesive</span>
+                <span className="text-green-600 font-semibold">FREE</span>
+              </div>
+            )}
             {selectedUpsells.length > 0 && (
               <>
                 {selectedUpsells.map(id => {

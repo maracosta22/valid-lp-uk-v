@@ -71,10 +71,10 @@ export function UpsellProductsUk({
           const isSelected = selectedProducts.includes(product.id)
           
           return (
-            <button
+            <div
               key={product.id}
               onClick={() => handleToggle(product)}
-              className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all duration-200 text-left ${
+              className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all duration-200 text-left cursor-pointer ${
                 isSelected 
                   ? "border-primary bg-orange-50" 
                   : "border-gray-200 bg-white hover:border-gray-300"
@@ -112,14 +112,22 @@ export function UpsellProductsUk({
               </div>
 
               {/* Toggle Indicator */}
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+              <button
+                type="button"
+                aria-pressed={isSelected}
+                aria-label={`${isSelected ? "Remove" : "Add"} ${product.name}`}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleToggle(product)
+                }}
+                className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
                 isSelected 
                   ? "bg-primary text-white" 
                   : "border-2 border-gray-300 bg-white"
               }`}>
                 {isSelected && <Check className="w-4 h-4" />}
-              </div>
-            </button>
+              </button>
+            </div>
           )
         })}
       </div>

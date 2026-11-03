@@ -10,18 +10,19 @@ interface ProductGalleryProps {
   productName: string
   video?: string
   videoThumbnail?: string
+  videoPosition?: number
 }
 
-export function ProductGallery({ images, productName, video, videoThumbnail }: ProductGalleryProps) {
-  // Build ordered items: [img0, video?, img1, img2, ...]
-  // Video is inserted at position 1 (second slot) when present
+export function ProductGallery({ images, productName, video, videoThumbnail, videoPosition = 1 }: ProductGalleryProps) {
+  // Build ordered items: images with the video inserted at `videoPosition` (default: second slot)
+  const imageItems = images.map((src) => ({ type: "image" as const, src }))
   const orderedItems: Array<{ type: "image"; src: string } | { type: "video" }> = video
     ? [
-        { type: "image", src: images[0] },
+        ...imageItems.slice(0, videoPosition),
         { type: "video" },
-        ...images.slice(1).map((src) => ({ type: "image" as const, src })),
+        ...imageItems.slice(videoPosition),
       ]
-    : images.map((src) => ({ type: "image" as const, src }))
+    : imageItems
 
   const totalItems = orderedItems.length
   const [selectedIndex, setSelectedIndex] = useState(0)

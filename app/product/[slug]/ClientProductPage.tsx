@@ -237,7 +237,7 @@ window.addEventListener("scroll", handleScroll, { passive: true })
         {/* Product Section */}
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
           {/* Gallery */}
-          <ProductGallery images={product.images} productName={product.name} video={product.video} videoThumbnail={product.videoThumbnail} />
+          <ProductGallery images={product.images} productName={product.name} video={product.video} videoThumbnail={product.videoThumbnail} videoPosition={product.videoPosition} />
 
           {/* Details */}
           <div className="flex flex-col min-w-0 w-full overflow-hidden max-w-full">

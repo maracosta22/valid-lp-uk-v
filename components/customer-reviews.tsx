@@ -525,6 +525,23 @@ const reviews: Review[] = [
 
 const totalReviews = 2847
 
+const RECENT_HOURS = [3, 5, 8, 12, 18]
+
+function getRelativeTime(index: number, isFrench: boolean) {
+  if (index < RECENT_HOURS.length) {
+    const hours = RECENT_HOURS[index]
+    return isFrench ? `il y a ${hours} heures` : `${hours} hours ago`
+  }
+  const days = index - RECENT_HOURS.length + 1
+  if (days < 7) {
+    if (isFrench) return `il y a ${days} jour${days > 1 ? 's' : ''}`
+    return `${days} day${days > 1 ? 's' : ''} ago`
+  }
+  const weeks = Math.floor(days / 7)
+  if (isFrench) return `il y a ${weeks} semaine${weeks > 1 ? 's' : ''}`
+  return `${weeks} week${weeks > 1 ? 's' : ''} ago`
+}
+
 export function CustomerReviews({ isFrench = false, isUK = false }: CustomerReviewsProps) {
   const [helpfulReviews, setHelpfulReviews] = useState<string[]>([])
 
@@ -560,7 +577,7 @@ export function CustomerReviews({ isFrench = false, isUK = false }: CustomerRevi
 
       {/* Reviews List */}
       <div className="space-y-8">
-        {displayReviews.map((review) => (
+        {displayReviews.map((review, index) => (
           <article key={review.id} className="border-b border-border pb-8 last:border-0">
             {/* Author */}
             <div className="flex items-center gap-3 mb-3">
@@ -587,7 +604,7 @@ export function CustomerReviews({ isFrench = false, isUK = false }: CustomerRevi
 
             {/* Date & Location */}
             <p className="text-xs sm:text-sm text-muted-foreground mb-1">
-              {isFrench ? 'Avis postés' : 'Posted'} {isFrench ? 'en' : 'in'} {review.country} {isFrench ? 'le' : 'on'} {isFrench ? (review.dateFr || review.date) : review.date}
+              {isFrench ? 'Avis postés' : 'Posted'} {isFrench ? 'en' : 'in'} {review.country} {getRelativeTime(index, isFrench)}
             </p>
 
             {/* Product Details */}
