@@ -21,10 +21,10 @@ const reviews: Review[] = [
   {
     author: "Heather",
     location: "Weobley",
-    rating: 4,
+    rating: 1,
     title: "Laura Ashley tree",
-    when: "10 months ago",
-    body: "Beautiful tree. Very happy, easy to assemble, no fuss with putting lights on. Would definitely recommend and brilliant quality.",
+    when: "2 weeks ago",
+    body: "Beautiful tree. Very happy, easy to assemble, no fuss with putting lights on. Would definitely recommend and brilliant quality. I'm only giving one star because I bought it two weeks ago for £120 and today the price has dropped to £30... anyway, the product is good, thank you.",
     photo: {
       src: "/images/christmas/review-heather.png",
       alt: "Customer photo of the boxed pre-lit tree next to a rattan tree skirt",
