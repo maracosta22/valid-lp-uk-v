@@ -44,7 +44,7 @@ export function BundleSelectorUK({ unitCents, quantity, onQuantityChange }: Bund
               type="button"
               aria-pressed={o.selected}
               onClick={() => onQuantityChange(o.qty)}
-              className={`relative w-full text-left rounded-3xl p-4 flex gap-3 items-start transition-colors ${
+              className={`relative w-full text-left rounded-3xl p-4 ${o.badge ? "mt-2 pt-6" : ""} flex gap-3 items-start transition-colors ${
                 o.selected ? "border-2 border-primary bg-white" : "border border-border bg-card hover:bg-white"
               }`}
             >
