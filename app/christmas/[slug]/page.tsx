@@ -36,6 +36,9 @@ export default async function ChristmasProductPage({ params }: { params: Promise
   const category = christmasCategories.find((c) => c.id === product.category)
   const related = christmasProducts.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4)
   const rich = Boolean(product.tagline)
+  const alsoBought = christmasProducts
+    .filter((p) => p.category === "baubles-bows" && /bauble/i.test(p.name) && p.slug !== product.slug)
+    .slice(0, 4)
 
   return (
     <div className="flex flex-col pb-12 lg:pb-20">
@@ -114,6 +117,23 @@ export default async function ChristmasProductPage({ params }: { params: Promise
             </div>
           </div>
         </div>
+
+        {product.loveIt && alsoBought.length > 0 && (
+          <section aria-labelledby="also-bought" className="flex flex-col gap-6">
+            <h2 id="also-bought" className="font-serif text-3xl sm:text-4xl">
+              Others also bought
+            </h2>
+            <ul className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:gap-6">
+              {alsoBought.map((p) => (
+                <li key={p.slug} className="w-40 shrink-0 snap-start sm:w-auto">
+                  <Link href={`/christmas/${p.slug}`} className="block">
+                    <ChristmasProductCard product={p} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {product.loveIt && <ChristmasLoveIt items={product.loveIt} />}
         <ChristmasStepsAndSpecs product={product} />
