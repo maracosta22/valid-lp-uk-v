@@ -30,7 +30,8 @@ export function BundleSelectorUK({ unitCents, quantity, onQuantityChange }: Bund
       <div className="rounded-3xl bg-foreground text-background px-4 py-3">
         <p className="text-sm font-semibold">Early Black Friday: buy more, save more</p>
         <p className="text-xs opacity-80">
-          Save {tier6.percent}% on {tier6.minQty}+ panels and {tier12.percent}% on {tier12.minQty}+, with free adhesive. Ends 30 November.
+          Save {quoteBundle(unitCents, tier6.minQty).percent}% on {tier6.minQty}+ panels and{" "}
+          {quoteBundle(unitCents, tier12.minQty).percent}% on {tier12.minQty}+, with free adhesive. Ends 30 November.
         </p>
       </div>
 

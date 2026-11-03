@@ -48,6 +48,17 @@ export async function POST(request: NextRequest) {
   const bundle = panelQty > 0 ? quoteBundle(panelBase, panelQty) : null
   if (bundle && bundle.percent > 0) {
     lines = lines.map((l) => (isPanel(l.id) ? { ...l, unitCents: bundle.unitCents } : l))
+    // A fixed pack price (e.g. 12 for £101.90) is not always divisible per panel: put the leftover
+    // pence on one panel, split into its own line, so Stripe charges exactly bundle.totalCents.
+    const remainder = bundle.totalCents - bundle.unitCents * panelQty
+    const idx = lines.findIndex((l) => isPanel(l.id))
+    if (remainder > 0 && idx >= 0) {
+      const line = lines[idx]
+      const extra = { ...line, quantity: 1, unitCents: line.unitCents + remainder }
+      lines = line.quantity > 1
+        ? [...lines.slice(0, idx), { ...line, quantity: line.quantity - 1 }, extra, ...lines.slice(idx + 1)]
+        : [...lines.slice(0, idx), extra, ...lines.slice(idx + 1)]
+    }
   }
 
   let utms: Record<string, string> = {}
