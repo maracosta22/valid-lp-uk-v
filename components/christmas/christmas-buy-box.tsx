@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Check, Minus, Plus, RotateCcw, Shield, Truck } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
@@ -216,7 +217,15 @@ export function ChristmasBuyBox({ product, children }: { product: ChristmasProdu
                         <Image src={c.image} alt={c.product.name} fill sizes="56px" className="object-cover" />
                       )}
                     </span>
-                    <span className="min-w-0 flex-1 text-sm font-medium leading-snug">{c.name}</span>
+                    <span className="min-w-0 flex-1 text-sm font-medium leading-snug">
+                      <Link
+                        href={`/christmas/${c.product.slug}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+                      >
+                        {c.name}
+                      </Link>
+                    </span>
                     <span className="shrink-0 text-sm font-semibold">+ {formatGBP(c.price)}</span>
                   </label>
                 </li>

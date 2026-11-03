@@ -14,6 +14,7 @@ export interface UpsellProduct {
   price: number
   originalPrice?: number
   image: string
+  href?: string
 }
 
 export const UPSELL_PRODUCTS_UK: UpsellProduct[] = [
@@ -50,6 +51,7 @@ export const CHRISTMAS_UPSELL_PRODUCTS_UK: UpsellProduct[] = CHRISTMAS_UPSELLS.f
       description,
       price: product.price,
       image: product.images[0],
+      href: `/christmas/${slug}`,
     },
   ]
 })
@@ -120,7 +122,19 @@ export function UpsellProductsUk({
               {/* Product Info */}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground leading-tight">
-                  {product.name}
+                  {product.href ? (
+                    <a
+                      href={product.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-primary hover:decoration-primary"
+                    >
+                      {product.name}
+                    </a>
+                  ) : (
+                    product.name
+                  )}
                 </p>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   {product.description}
