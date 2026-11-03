@@ -7,6 +7,7 @@ import { ChristmasGallery } from "@/components/christmas/christmas-gallery"
 import { ChristmasBuyBox } from "@/components/christmas/christmas-buy-box"
 import { ChristmasProductCard } from "@/components/christmas/christmas-product-card"
 import { ChristmasReviews } from "@/components/christmas/christmas-reviews"
+import { ChristmasQuickAdd } from "@/components/christmas/christmas-quick-add"
 import {
   ChristmasFaq,
   ChristmasHighlights,
@@ -124,12 +125,13 @@ export default async function ChristmasProductPage({ params }: { params: Promise
             <h2 id="also-bought" className="font-serif text-3xl sm:text-4xl">
               Others also bought
             </h2>
-<ul className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
-          {alsoBought.map((p) => (
-            <li key={p.slug} className="min-w-0">
-                  <Link href={`/christmas/${p.slug}`} className="block">
+            <ul className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
+              {alsoBought.map((p) => (
+                <li key={p.slug} className="relative min-w-0">
+                  <Link href={`/christmas/${p.slug}`} className="block pr-10">
                     <ChristmasProductCard product={p} />
                   </Link>
+                  <ChristmasQuickAdd product={p} className="absolute bottom-0 right-0" />
                 </li>
               ))}
             </ul>
