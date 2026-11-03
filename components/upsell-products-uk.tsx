@@ -2,6 +2,7 @@
 
 import { Plus, Check } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 const LED_KIT_IMAGE = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/LED0101-NcQN4b3GARfX7EQhQSIcnMbQB9NsFa.jpg"
 const GLUE_IMAGE = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/CLEAN04-jsHtrQ87vwg45Qyo5RrSkzrJbV2MXC.jpg"
@@ -13,6 +14,7 @@ export interface UpsellProduct {
   price: number
   originalPrice?: number
   image: string
+  href?: string
 }
 
 export const UPSELL_PRODUCTS_UK: UpsellProduct[] = [
@@ -23,6 +25,7 @@ export const UPSELL_PRODUCTS_UK: UpsellProduct[] = [
     price: 109.00,
     originalPrice: 180.00,
     image: LED_KIT_IMAGE,
+    href: "/product/recessed-led-strip-lighting-uk",
   },
   {
     id: "glue-kit-uk",
@@ -31,6 +34,7 @@ export const UPSELL_PRODUCTS_UK: UpsellProduct[] = [
     price: 12.90,
     originalPrice: 21.90,
     image: GLUE_IMAGE,
+    href: "/product/wall-preparation-cleaner-uk",
   },
 ]
 
@@ -71,10 +75,10 @@ export function UpsellProductsUk({
           const isSelected = selectedProducts.includes(product.id)
           
           return (
-            <button
+            <div
               key={product.id}
               onClick={() => handleToggle(product)}
-              className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all duration-200 text-left ${
+              className={`w-full flex items-center gap-3 p-3 rounded-lg border-2 transition-all duration-200 text-left cursor-pointer ${
                 isSelected 
                   ? "border-primary bg-orange-50" 
                   : "border-gray-200 bg-white hover:border-gray-300"
@@ -94,7 +98,17 @@ export function UpsellProductsUk({
               {/* Product Info */}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-foreground leading-tight">
-                  {product.name}
+                  {product.href ? (
+                    <Link
+                      href={product.href}
+                      onClick={(e) => e.stopPropagation()}
+                      className="underline-offset-2 hover:text-primary hover:underline focus-visible:underline"
+                    >
+                      {product.name}
+                    </Link>
+                  ) : (
+                    product.name
+                  )}
                 </p>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   {product.description}
@@ -112,14 +126,22 @@ export function UpsellProductsUk({
               </div>
 
               {/* Toggle Indicator */}
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+              <button
+                type="button"
+                aria-pressed={isSelected}
+                aria-label={`${isSelected ? "Remove" : "Add"} ${product.name}`}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleToggle(product)
+                }}
+                className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
                 isSelected 
                   ? "bg-primary text-white" 
                   : "border-2 border-gray-300 bg-white"
               }`}>
                 {isSelected && <Check className="w-4 h-4" />}
-              </div>
-            </button>
+              </button>
+            </div>
           )
         })}
       </div>
