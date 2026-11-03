@@ -20,9 +20,24 @@ export interface ChristmasProduct {
   details?: string[]
   /** Optional per-value prices (same order as `values`). Overrides `price` when selected. */
   options?: { label: string; values: string[]; prices?: number[] }
-  /** Products offered as optional add-ons next to the buy button. */
-  bundleWith?: { slug: string; optionIndex?: number }[]
+  /** Products offered as optional add-ons next to the buy button. `short` names it in the buy label. */
+  bundleWith?: { slug: string; optionIndex?: number; short?: string; preselected?: boolean }[]
+  /** Short noun for the buy button, e.g. "tree" → "Buy tree + skirt". */
+  buyLabel?: string
+  bundleTitle?: string
+  tagline?: string
+  highlights?: { icon: ChristmasIcon; label: string }[]
+  loveIt?: { icon: ChristmasIcon; title: string; body: string }[]
+  steps?: { title: string; body: string }[]
+  specs?: { label: string; value: string }[]
+  faq?: { q: string; a: string }[]
+  /** Glass call-to-action promoting the wall panel on a room photo. */
+  pairWithPanel?: boolean
 }
+
+export type ChristmasIcon = "height" | "lights" | "colours" | "remote" | "tree"
+
+export const CHRISTMAS_ORDER_BY = "15 December"
 
 export const christmasCategories: ChristmasCategory[] = [
   { id: "trees", name: "Trees", tile: "sage" },
@@ -65,7 +80,64 @@ export const christmasProducts: ChristmasProduct[] = [
   }),
   item("8ft Pre Lit Grand Fir Christmas Tree", "trees", {
     price: 30.5,
-    bundleWith: [{ slug: "scallop-rattan-tree-skirt", optionIndex: 0 }, { slug: "light-up-bristle-treescape-decoration" }],
+    bundleWith: [
+      { slug: "scallop-rattan-tree-skirt", optionIndex: 0, short: "skirt", preselected: true },
+      { slug: "light-up-bristle-treescape-decoration", short: "treescape" },
+    ],
+    buyLabel: "tree",
+    bundleTitle: "Complete the tree",
+    pairWithPanel: true,
+    tagline:
+      "A full, statement-size tree that's lit and ready the moment you plug it in. Choose a warm white glow or a playful multicolour, and switch modes from the sofa.",
+    highlights: [
+      { icon: "height", label: "8ft tall" },
+      { icon: "lights", label: "2,000 LEDs" },
+      { icon: "colours", label: "Warm white or multicolour" },
+      { icon: "remote", label: "Remote + foot pedal" },
+    ],
+    loveIt: [
+      {
+        icon: "lights",
+        title: "Lit and ready",
+        body: "The lights are already threaded through the branches on memory wire, so there's no untangling strings every December.",
+      },
+      {
+        icon: "tree",
+        title: "Up in minutes",
+        body: "A quick-connect pole and a sturdy metal stand mean you build it section by section, then plug in once.",
+      },
+      {
+        icon: "remote",
+        title: "Two moods, eight effects",
+        body: "Warm white for a cosy evening, multicolour for the kids, and eight effects you can change by remote or foot pedal.",
+      },
+    ],
+    steps: [
+      { title: "Set up the stand", body: "Open the metal stand and place it where the tree will go." },
+      { title: "Stack the sections", body: "Slot the quick-connect sections together; the lights connect as you go." },
+      { title: "Plug in and shape", body: "Switch on, pick your light mode and fluff the branches into shape." },
+    ],
+    specs: [
+      { label: "Height", value: "8ft (244 cm)" },
+      { label: "Lights", value: "2,000 LEDs on memory wire" },
+      { label: "Light colours", value: "Warm white or multicolour" },
+      { label: "Effects", value: "8, with remote control and foot pedal" },
+      { label: "Assembly", value: "Quick-connect pole, metal stand" },
+      { label: "Power", value: "Mains, UK plug" },
+      { label: "Colour", value: "Green" },
+    ],
+    faq: [
+      {
+        q: "Will it arrive before Christmas?",
+        a: `Order by ${CHRISTMAS_ORDER_BY} for delivery before Christmas. You'll get a tracking link by email as soon as it ships.`,
+      },
+      { q: "Does it come with a UK plug?", a: "Yes. The tree is mains powered and comes ready to plug into a standard UK socket." },
+      {
+        q: "How long does it take to put up?",
+        a: "Not long. Open the stand, slot the quick-connect sections together and switch on. Fluffing the branches is the longest part.",
+      },
+      { q: "Can I return it?", a: "Yes. You have 30 days to return it if it isn't right for your home." },
+    ],
     images: photos("8ft-pre-lit-grand-fir-tree", 4),
     description:
       "Standing at an impressive 8ft tall, this Grand Fir Christmas tree brings instant festive impact to your home. It's pre-lit with 2,000 LED lights, expertly arranged on memory wire for effortless styling year after year. The lights can be set to either warm white or multi-coloured, with eight light settings, plus a foot pedal and remote control for easy operation. A quick-connect power pole and sturdy metal stand ensure fast, hassle-free assembly.",
