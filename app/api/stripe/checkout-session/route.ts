@@ -16,7 +16,29 @@ const clip = (v: unknown, n = 480) => (typeof v === "string" && v ? v.slice(0, n
  * The browser sends product ids, quantities and the displayed unit price; the server
  * checks the price against the catalog and builds every amount itself.
  */
+// Best-effort per-instance limit: stops bursts of sessions from the same IP within seconds.
+const RATE_LIMIT = 10
+const RATE_WINDOW_MS = 60_000
+const hits = new Map<string, number[]>()
+
+function isRateLimited(ip: string) {
+  const now = Date.now()
+  const recent = (hits.get(ip) || []).filter((t) => now - t < RATE_WINDOW_MS)
+  recent.push(now)
+  hits.set(ip, recent)
+  if (hits.size > 5000) {
+    for (const [key, times] of hits) if (times.every((t) => now - t >= RATE_WINDOW_MS)) hits.delete(key)
+  }
+  return recent.length > RATE_LIMIT
+}
+
 export async function POST(request: NextRequest) {
+  const ip = getClientIpFromHeaders(request.headers) || "unknown"
+  if (isRateLimited(ip)) {
+    console.warn("[Stripe] checkout rate limited:", { ip })
+    return NextResponse.json({ error: "Too many attempts. Please wait a minute and try again." }, { status: 429 })
+  }
+
   let body: any
   try {
     body = await request.json()
@@ -109,6 +131,9 @@ export async function POST(request: NextRequest) {
       mode: "payment",
       locale: (locale === "fr-FR" ? "fr" : "en-GB") as Stripe.Checkout.SessionCreateParams.Locale,
       line_items: buildLineItems(true),
+      // Full billing address → complete AVS checks for UK issuers; Customer record → purchase history for Radar
+      billing_address_collection: "required",
+      customer_creation: "always",
       shipping_address_collection: {
         allowed_countries: shippingCountries as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[],
       },

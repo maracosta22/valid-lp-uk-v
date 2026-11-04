@@ -10,6 +10,7 @@ import { Footer } from "@/components/footer"
 import { MetaPixelProvider } from "@/components/meta-pixel-provider"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { Toaster } from "@/components/ui/toaster"
+import { StripeJsLoader } from "@/components/stripe-js-loader"
 import "./globals.css"
 
 const _inter = Manrope({ subsets: ["latin"], variable: "--font-inter", weight: ["400", "500", "600", "700"] })
@@ -166,6 +167,7 @@ export default function RootLayout({
           </MetaPixelProvider>
         </Suspense>
         <Toaster />
+        <StripeJsLoader />
         <Analytics />
       </body>
     </html>

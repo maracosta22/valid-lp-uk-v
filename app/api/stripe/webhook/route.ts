@@ -9,7 +9,8 @@ export const dynamic = "force-dynamic"
 /**
  * Stripe webhook (Developers → Webhooks). Signature verified with STRIPE_WEBHOOK_SECRET.
  * Events: checkout.session.completed, checkout.session.async_payment_succeeded,
- *         checkout.session.async_payment_failed, charge.refunded
+ *         checkout.session.async_payment_failed, charge.refunded,
+ *         payment_intent.payment_failed, charge.failed (decline + risk logging)
  * Meta Purchase (Conversions API) is sent ONLY when payment_status === "paid".
  */
 export async function POST(request: NextRequest) {
@@ -48,6 +49,38 @@ export async function POST(request: NextRequest) {
       case "checkout.session.async_payment_failed": {
         const session = event.data.object as Stripe.Checkout.Session
         console.log("[Stripe Webhook] FAILED:", { id: session.id })
+        break
+      }
+
+      case "payment_intent.payment_failed": {
+        const pi = event.data.object as Stripe.PaymentIntent
+        if (pi.metadata?.source !== CHECKOUT_SOURCE) break
+        const charge = pi.latest_charge && typeof pi.latest_charge === "object" ? pi.latest_charge : null
+        console.log("[Stripe Webhook] PI FAILED:", {
+          id: pi.id,
+          amount: pi.amount,
+          code: pi.last_payment_error?.code,
+          decline: pi.last_payment_error?.decline_code,
+          message: pi.last_payment_error?.message,
+          risk_level: charge?.outcome?.risk_level,
+          risk_score: charge?.outcome?.risk_score,
+        })
+        break
+      }
+
+      case "charge.failed": {
+        // Charges don't always carry the PaymentIntent metadata, so log every failure with its risk outcome
+        const charge = event.data.object as Stripe.Charge
+        console.log("[Stripe Webhook] CHARGE FAILED:", {
+          charge: charge.id,
+          payment_intent: charge.payment_intent,
+          code: charge.failure_code,
+          reason: charge.outcome?.reason,
+          network_status: charge.outcome?.network_status,
+          risk_level: charge.outcome?.risk_level,
+          risk_score: charge.outcome?.risk_score,
+          card_country: charge.payment_method_details?.card?.country,
+        })
         break
       }
 

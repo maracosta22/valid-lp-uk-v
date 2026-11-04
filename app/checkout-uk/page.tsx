@@ -311,7 +311,8 @@ export default function CheckoutUKPage() {
             <p className="text-sm text-blue-700">Arrives within <strong>6 days</strong></p>
           </div>
 
-          {/* Quantity selector */}
+          {/* Quantity selector — hidden once payment is open so each click doesn't create a new Stripe session */}
+          {!checkoutStarted && (
           <div className="flex items-center justify-between mb-4">
             <span className="text-sm text-muted-foreground">Quantity</span>
             <div className="flex items-center gap-2">
@@ -336,6 +337,7 @@ export default function CheckoutUKPage() {
               </button>
             </div>
           </div>
+          )}
 
           {/* Bonus Items Section */}
           {bonusData && (

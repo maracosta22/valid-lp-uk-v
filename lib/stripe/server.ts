@@ -3,13 +3,13 @@ import Stripe from "stripe"
 
 /**
  * Stripe server client. Secret key ONLY from Vercel env vars:
- *   STRIPE_SECRET_KEY (or legacy atio_STRIPE_SECRET_KEY)
+ *   STRIPE_SECRET_KEY
  */
 let client: Stripe | null = null
 
 export function getStripe(): Stripe {
   if (client) return client
-  const key = process.env.STRIPE_SECRET_KEY || process.env.atio_STRIPE_SECRET_KEY
+  const key = process.env.STRIPE_SECRET_KEY
   if (!key) throw new Error("STRIPE_SECRET_KEY is not configured")
   client = new Stripe(key)
   return client

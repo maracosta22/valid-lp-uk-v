@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useCallback, useState } from "react"
-import { loadStripe } from "@stripe/stripe-js"
+import { stripePromise } from "@/lib/stripe/client"
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js"
 import { formatCartForTikTok, storePurchaseData, trackInitiateCheckout } from "@/lib/tiktok-events"
 import { Loader2, Lock, Gift, Check, Wrench, AlertCircle, RefreshCw } from "lucide-react"
@@ -18,9 +18,6 @@ interface BonusData {
   bonusValue: number
 }
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_atio_STRIPE_PUBLISHABLE_KEY!,
-)
 
 interface CartItem {
   product: {
