@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { Mail, MapPin, Clock, ChevronDown, MessageCircle } from "lucide-react"
+import { Mail, MapPin, Clock, ChevronDown, MessageCircle, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -151,6 +151,18 @@ export default function ContactPage() {
                     +44 7564 453579
                   </a>
                 </div>
+              </div>
+              <div
+                role="note"
+                aria-label="Shipping notice"
+                className="flex items-start gap-3 rounded-sm border border-dashed border-border px-4 py-3"
+              >
+                <Info className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                <p className="text-sm leading-relaxed text-muted-foreground text-pretty">
+                  <span className="font-medium text-foreground">Please note:</span> due to some strikes across the
+                  United Kingdom, we are experiencing delays with carrier deliveries. We are also seeing very high
+                  demand. Thank you to all our customers for your patience.
+                </p>
               </div>
               <div className="flex items-start gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary">
