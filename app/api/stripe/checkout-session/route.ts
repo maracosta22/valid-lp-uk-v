@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     throw err
   }
 
-  const { currency, shippingCountries, successPath, locale } = MARKETS[market]
+  const { currency, shippingCountries, locale } = MARKETS[market]
 
   // Early Black Friday bundles: the discount is applied HERE, on the server, from the
   // validated base price. The browser always sends the normal price (£14.50).
@@ -113,7 +113,8 @@ export async function POST(request: NextRequest) {
         allowed_countries: shippingCountries as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[],
       },
       phone_number_collection: { enabled: true },
-      return_url: `${origin}${successPath}?session_id={CHECKOUT_SESSION_ID}`,
+      // /thank-you fires Purchase (Pixel/TikTok/Ads) then redirects to the TrackerOrders page
+      return_url: `${origin}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
       metadata,
       payment_intent_data: { metadata: { source: CHECKOUT_SOURCE, market, ...(bundle?.gift ? { free_gift: BUNDLE_OFFER.giftId } : {}) } },
       ...(bundle?.gift

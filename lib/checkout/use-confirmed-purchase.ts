@@ -42,7 +42,13 @@ async function fetchStatus(orderId: string): Promise<OrderSummary | null> {
  */
 export function useConfirmedPurchase(
   orderId: string | null,
-  opts: { metaPixelId: string; googleAdsSendTo: string; onConfirmed?: () => void },
+  opts: {
+    metaPixelId: string
+    googleAdsSendTo: string
+    onConfirmed?: () => void
+    /** Called once all tracking for this order is done (or skipped). */
+    onFinished?: (data: OrderSummary | null) => void
+  },
 ) {
   const [summary, setSummary] = useState<OrderSummary | null>(null)
   const startedRef = useRef(false)
@@ -53,8 +59,10 @@ export function useConfirmedPurchase(
     if (!orderId || startedRef.current) return
     startedRef.current = true
 
+    let result: OrderSummary | null = null
     ;(async () => {
       const data = await fetchStatus(orderId)
+      result = data
       if (!data) return
       setSummary(data)
       if (data.status !== "paid") return
@@ -133,6 +141,8 @@ export function useConfirmedPurchase(
         })
       }
     })()
+      .catch(() => {})
+      .finally(() => optsRef.current.onFinished?.(result))
   }, [orderId])
 
   return summary
