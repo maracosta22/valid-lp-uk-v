@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import type Stripe from "stripe"
 import { CHECKOUT_SOURCE, getStripe, purchaseEventId } from "@/lib/stripe/server"
 import { sendPurchaseEventToAllPixels } from "@/lib/meta/sendEvent"
-import { sendOrderToTracker } from "@/lib/tracker-orders"
+import { ensureTrackerOrder } from "@/lib/tracker-orders"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
         }
         console.log("[Stripe Webhook] PAID:", { id: session.id, amount: session.amount_total, currency: session.currency })
         await sendServerPurchase(session)
-        await sendOrderToTracker(session)
+        await ensureTrackerOrder(session.id)
         break
       }
 
