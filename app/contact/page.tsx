@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { Mail, MapPin, Clock, ChevronDown } from "lucide-react"
+import { Mail, MapPin, Clock, ChevronDown, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -133,6 +133,25 @@ export default function ContactPage() {
           <div>
             <h2 className="font-serif text-2xl">Contact Information</h2>
             <div className="mt-8 space-y-6">
+              <div className="flex items-start gap-4 rounded-sm border border-border bg-secondary p-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-background">
+                  <MessageCircle className="h-5 w-5 text-foreground" aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="font-medium">Problems with your delivery?</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Message us on WhatsApp for fast support, 24 hours a day.
+                  </p>
+                  <a
+                    href="https://wa.me/447564453579"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-block font-medium text-foreground hover:underline"
+                  >
+                    +44 7564 453579
+                  </a>
+                </div>
+              </div>
               <div className="flex items-start gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary">
                   <Mail className="h-5 w-5 text-muted-foreground" />

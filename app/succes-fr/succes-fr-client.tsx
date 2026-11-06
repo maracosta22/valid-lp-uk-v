@@ -6,6 +6,7 @@ import Link from "next/link"
 import { CheckCircle, Package, RotateCcw, ShoppingCart, Star } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
 import { useConfirmedPurchase } from "@/lib/checkout/use-confirmed-purchase"
+import { OrderTrackingCard } from "@/components/order-tracking-card"
 
 declare global {
   interface Window {
@@ -24,7 +25,13 @@ const LED_UPSELL = {
   image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/kit-ruban-led-encastre-fr.jpg",
 }
 
-export default function SuccesFrClient({ sessionId = null }: { sessionId?: string | null }) {
+export default function SuccesFrClient({
+  sessionId = null,
+  tracking,
+}: {
+  sessionId?: string | null
+  tracking: { trackingUrl: string; trackingCode: string | null; email: string | null }
+}) {
   const { clearCart } = useCart()
   const [purchaseData, setPurchaseData] = useState<any>(null)
 
@@ -72,6 +79,13 @@ export default function SuccesFrClient({ sessionId = null }: { sessionId?: strin
             </span>
           </div>
         </div>
+
+        <OrderTrackingCard
+          market="FR"
+          trackingUrl={tracking.trackingUrl}
+          trackingCode={tracking.trackingCode}
+          email={tracking.email ?? purchaseData?.customerEmail ?? null}
+        />
 
         {/* Post-purchase upsell */}
         <div className="rounded-xl bg-white border border-primary/30 shadow-sm p-5">

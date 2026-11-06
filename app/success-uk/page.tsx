@@ -1,4 +1,7 @@
+import { getSuccessTracking } from "@/lib/success-tracking"
 import SuccessUKClient from "./success-uk-client"
+
+export const dynamic = "force-dynamic"
 
 export default async function SuccessUKPage({
   searchParams,
@@ -7,5 +10,6 @@ export default async function SuccessUKPage({
 }) {
   const params = await searchParams
   const sessionId = params.session_id ?? null
-  return <SuccessUKClient sessionId={sessionId} />
+  const tracking = await getSuccessTracking(sessionId)
+  return <SuccessUKClient sessionId={sessionId} tracking={tracking} />
 }
