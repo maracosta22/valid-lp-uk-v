@@ -1,6 +1,6 @@
 import "server-only"
 import { CHECKOUT_SOURCE, getStripe } from "@/lib/stripe/server"
-import { trackingPageUrl } from "@/lib/tracker-orders"
+import { ensureTrackerOrder, trackingPageUrl } from "@/lib/tracker-orders"
 
 const SESSION_RE = /^cs_(test|live)_[A-Za-z0-9]{10,200}$/
 
@@ -21,9 +21,13 @@ export async function getSuccessTracking(sessionId: string | null): Promise<Succ
 
     const email = session.customer_details?.email ?? null
     const pi = typeof session.payment_intent === "object" ? session.payment_intent : null
+    let trackingCode = pi?.metadata?.tracking_code || null
+    if (!trackingCode && session.payment_status === "paid") {
+      trackingCode = await ensureTrackerOrder(session.id)
+    }
     return {
       trackingUrl: trackingPageUrl(email),
-      trackingCode: pi?.metadata?.tracking_code || null,
+      trackingCode,
       email,
     }
   } catch (err: any) {
