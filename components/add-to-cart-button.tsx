@@ -69,6 +69,8 @@ export function AddToCartButton({ product, variant = "default", className, isFre
   const quantityOptions = isFrenchVersion ? frQuantities : enQuantities
 
   const handleBuyNow = (overrideQty?: number, overridePrice?: number) => {
+    window.location.href = "/contact"
+    return
     // Check if cart has products with different currency
     const cartHasProducts = items.length > 0
     if (cartHasProducts) {

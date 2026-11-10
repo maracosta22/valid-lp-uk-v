@@ -2,8 +2,7 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Menu, ShoppingBag, X } from "lucide-react"
-import { useCart } from "@/lib/cart-context"
+import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { StringLights } from "@/components/christmas/string-lights"
@@ -19,12 +18,7 @@ const navigation = [
 ]
 
 export function Header() {
-  const { totalItems, items } = useCart()
   const [open, setOpen] = useState(false)
-  
-  // Determine cart URL based on currency of items
-  const hasUKItems = items.some((item) => item.product.currency === "GBP")
-  const cartUrl = hasUKItems ? "/cart-uk" : "/cart"
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full px-4 py-1 sm:px-6 lg:px-10 lg:py-2">
@@ -86,18 +80,7 @@ export function Header() {
           ))}
         </div>
 
-        {/* Cart */}
-        <Link href={cartUrl} className="relative">
-          <Button variant="ghost" size="icon" className="rounded-full bg-card hover:bg-muted">
-            <ShoppingBag className="h-5 w-5" />
-            <span className="sr-only">Cart</span>
-          </Button>
-          {totalItems > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
-              {totalItems}
-            </span>
-          )}
-        </Link>
+        <div aria-hidden="true" className="w-10" />
       </nav>
       <StringLights />
     </header>

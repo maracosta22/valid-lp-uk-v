@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
-import { identifyUser } from "@/lib/tiktok-events"
 
 const faqs = [
   {
@@ -65,13 +64,6 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    
-    // TikTok: Identify user with email from contact form (for future event matching)
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get('email') as string
-    if (email) {
-      await identifyUser({ email: email.trim() })
-    }
     
     setSubmitted(true)
   }
