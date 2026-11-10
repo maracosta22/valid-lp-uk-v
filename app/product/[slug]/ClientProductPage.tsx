@@ -133,8 +133,6 @@ export default function ClientProductPage({
   const { opacity, isVisible } = useScrollVisibility()
   const [showStickyCta, setShowStickyCta] = useState(false)
   const { toast } = useToast()
-  const router = useRouter()
-
   // FR Order Summary state — shows after "Commander Maintenant" is clicked
   const [frOrderData, setFrOrderData] = useState<{ qty: number; price: number; totalPrice: number; ledFree: boolean } | null>(null)
   
@@ -143,7 +141,7 @@ export default function ClientProductPage({
     setFrOrderData(orderData)
     toast({
       title: "Produit ajouté !",
-      description: `${data.qty} panneau(x) ajouté(s) au panier`,
+      description: `${orderData.qty} panneau(x) ajouté(s) au panier`,
     })
   }
   
@@ -174,23 +172,8 @@ window.addEventListener("scroll", handleScroll, { passive: true })
     })
   }
 
-  // FR: Handle "Finaliser Ma Commande" button click - go directly to checkout
   const handleFinalizeOrder = () => {
-    // Save the order data so checkout-fr has access to it
-    if (frOrderData) {
-      const orderData = {
-        productId: product.id,
-        name: product.name,
-        price: frOrderData.price,
-        totalPrice: frOrderData.totalPrice,
-        quantity: frOrderData.qty,
-        image: product.images?.[0] || product.image || "",
-        currency: "EUR",
-        ledFree: frOrderData.ledFree,
-      }
-      sessionStorage.setItem("checkout_order_fr", JSON.stringify(orderData))
-    }
-    router.push("/checkout-fr")
+    window.location.href = "/contact"
   }
 
   return (
