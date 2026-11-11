@@ -373,7 +373,7 @@ export function AddToCartButton({ product, variant = "default", className, isFre
     }
     
     const handleBuyNowDirect = () => {
-      // Add to cart and go directly to checkout
+      // Add the selected bundle and open the cart before checkout.
       const eventId = generateEventId("atc")
       trackAddToCart({
         contentId: product.id,
@@ -448,7 +448,7 @@ export function AddToCartButton({ product, variant = "default", className, isFre
           Add to Cart
         </button>
 
-        {/* Buy Now button (orange, goes to checkout) */}
+        {/* Buy Now opens the cart before checkout. */}
         <button
           type="button"
           disabled={!product.inStock}
