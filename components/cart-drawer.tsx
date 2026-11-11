@@ -32,13 +32,18 @@ export function CartDrawer() {
   )
   const currency = items[0]?.product.currency || "GBP"
   const hasFlexiblePanel = items.some((item) => item.product.id === "prod_UK_flexible_acoustic")
-  const ledRecommendation = products.find(
-    (product) =>
-      product.id === "prod_UK_led_strip" &&
-      product.inStock &&
-      !items.some((item) => item.product.id === product.id),
-  )
-  const suggestions = hasFlexiblePanel && currency === "GBP" && ledRecommendation ? [ledRecommendation] : []
+  const recommendationIds = [
+    "prod_U4kuzRsw3B5dBe",
+    "prod_U4kuu8uiPc6s44",
+    "prod_U4kv4CKxEyo0xu",
+    "prod_U4kvhZVdMgj3T5",
+  ]
+  const suggestions = hasFlexiblePanel && currency === "GBP"
+    ? recommendationIds.flatMap((productId) => {
+        const product = products.find((candidate) => candidate.id === productId)
+        return product && product.inStock && !items.some((item) => item.product.id === product.id) ? [product] : []
+      })
+    : []
 
   const goToCheckout = () => {
     setCartOpen(false)
@@ -139,20 +144,27 @@ export function CartDrawer() {
                   <h2 id="cart-recommendations-title" className="mb-3 font-semibold">Complete your project</h2>
                   <ul className="flex flex-col gap-2">
                     {suggestions.map((product) => (
-                      <li key={product.id} className="flex items-center gap-3 rounded-xl border border-border bg-background p-2.5">
+                      <li key={product.id} className="flex items-center gap-3 rounded-xl border border-border bg-background p-3">
                         <Image
                           src={product.images[0] || "/placeholder.svg"}
                           alt={product.name}
                           width={52}
-                          height={60}
+                          height={64}
                           unoptimized
-                          className="size-14 shrink-0 rounded-md object-cover"
+                          className="h-16 w-[52px] shrink-0 rounded-md object-cover"
                         />
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-semibold">{product.name}</p>
-                          <p className="mt-1 text-xs font-medium">{formatPrice(product.price, product.currency)}</p>
+                        <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
+                          <span className={`rounded px-1.5 py-1 text-[9px] font-bold tracking-wide ${
+                            product.id === "prod_U4kuzRsw3B5dBe" || product.id === "prod_U4kv4CKxEyo0xu"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-green-100 text-green-800"
+                          }`}>
+                            {product.id === "prod_U4kuzRsw3B5dBe" || product.id === "prod_U4kv4CKxEyo0xu" ? "FLASH SALE" : "BEST-SELLER"}
+                          </span>
+                          <p className="w-full truncate text-sm font-semibold">{product.name}</p>
+                          <p className="text-xs font-bold">{formatPrice(product.price, product.currency)}</p>
                         </div>
-                        <Button type="button" size="sm" className="rounded-full" onClick={() => addItem(product, 1)}>
+                        <Button type="button" size="sm" className="h-11 shrink-0 rounded-full px-3.5" onClick={() => addItem(product, 1)}>
                           <Plus data-icon="inline-start" />
                           Add
                         </Button>
