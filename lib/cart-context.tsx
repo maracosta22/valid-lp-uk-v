@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 import type { Product } from "./products"
+import { saveShopifyCart } from "./shopify-checkout"
 
 export interface CartItem {
   product: Product
@@ -39,6 +40,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (mounted) {
       localStorage.setItem("nordic-haus-cart", JSON.stringify(items))
+      // Keep a copy of the cart as Shopify variant IDs + quantities
+      saveShopifyCart(items)
     }
   }, [items, mounted])
 
