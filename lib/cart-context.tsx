@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react"
 import type { Product } from "./products"
 import { saveShopifyCart } from "./shopify-checkout"
 
@@ -28,7 +28,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
   const [mounted, setMounted] = useState(false)
   const [isCartOpen, setCartOpen] = useState(false)
-  const openCart = () => setCartOpen(true)
+  const openCart = useCallback(() => setCartOpen(true), [])
 
   useEffect(() => {
     setMounted(true)
