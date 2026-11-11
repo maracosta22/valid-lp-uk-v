@@ -1,0 +1,30 @@
+LP SHOPIFY — VERSÃO 5
+
+Extraia o ZIP inteiro e publique index.html com suas pastas, preservando a estrutura.
+
+BRINDE AUTOMÁTICO
+Ao atingir 12 painéis no carrinho, somando as quatro cores, uma unidade de Wall Preparation Cleaner é incluída como brinde. O ID enviado ao checkout é 67926344597695, SKU WALL-CLEANER.
+O brinde aparece por zero na simulação da LP. Ele é enviado como uma unidade real do produto para a Shopify, onde o desconto precisa zerá-lo.
+Há um brinde por pedido. Se a quantidade de painéis ficar abaixo de 12, o brinde automático sai. Quantidades adicionais do cleaner adicionadas pelo cliente continuam como itens pagos. A Shopify recebe a soma das unidades pagas e grátis do mesmo SKU.
+A oferta anterior de adesivo foi substituída pelo Wall Preparation Cleaner no kit de 12 e retirada do kit de 6.
+
+PREÇOS ALINHADOS AO RETORNO REAL DA SHOPIFY
+1 a 5 painéis: 14.50 por unidade.
+6 a 11 painéis: 13.05 por unidade, total de 78.30 em 6.
+12+ painéis: 8.56 por unidade, total de 102.72 em 12 e 205.44 em 24.
+A Shopify está aplicando 41% com arredondamento do desconto por unidade. O retorno real para 12 unidades foi 102.72. A LP usa esse resultado verificado, incluindo mistura de cores, em vez do cálculo teórico de 102.66.
+No kit de 12 a economia exibida é 71.28 sobre 174.00.
+A moeda visual segue GBP (£), como na loja consultada durante o teste. Se você alterar a moeda ou os preços da Shopify, os textos e a simulação da LP precisam acompanhar.
+
+PENDÊNCIA NA REGRA DE BRINDE DA SHOPIFY
+No teste real, enviando 12 painéis e 1 WALL-CLEANER, a Shopify aplicou o desconto de 41% nos painéis, mas o cleaner continuou cobrando 15.50. O subtotal retornado foi 118.22.
+Portanto, a inclusão automática pela LP está feita, mas a regra de gratuidade na Shopify ainda precisa ser revisada. A LP não pode alterar o preço cobrado pela Shopify por meio de um link de checkout. Garanta que uma unidade do WALL-CLEANER fique gratuita junto do desconto dos painéis.
+Nenhum desconto foi alterado no seu painel administrativo.
+
+CHECKOUT
+Destino: https://get.wooddecouk.com.
+Os 24 IDs reais continuam vinculados. Não há fallback para o ID único de teste.
+
+VALIDAÇÃO
+Testados: 6, 12 e 24 painéis, cores misturadas, uma única unidade automática do brinde, separação de extras pagos, remoção do brinde abaixo de 12, IDs e quantidades no link de checkout, valores dos cartões e resumo do carrinho.
+Foi conferido o retorno real da Shopify para as faixas de 6 e 12 e para mistura de cores. Nenhuma compra foi realizada.
