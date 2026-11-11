@@ -129,7 +129,7 @@ export default function ClientProductPage({
   
   // Determine currency symbol based on version
   const currencySymbol = isFrenchVersion ? "€" : "£"
-  const { addItem, totalItems } = useCart()
+  const { addItem, totalItems, openCart } = useCart()
   const { opacity, isVisible } = useScrollVisibility()
   const [showStickyCta, setShowStickyCta] = useState(false)
   const { toast } = useToast()
@@ -165,6 +165,7 @@ window.addEventListener("scroll", handleScroll, { passive: true })
       // addItem expects (product, quantity) - pass the full product object and quantity separately
       addItem(bundleProduct, 1)
     })
+    openCart()
     // Show toast confirmation
     toast({
       title: isUKVersion ? "Added to cart!" : isFrenchVersion ? "Ajouté au panier !" : "Added to cart!",
@@ -173,7 +174,7 @@ window.addEventListener("scroll", handleScroll, { passive: true })
   }
 
   const handleFinalizeOrder = () => {
-    window.location.href = "/contact"
+    window.location.href = "/checkout-fr"
   }
 
   return (

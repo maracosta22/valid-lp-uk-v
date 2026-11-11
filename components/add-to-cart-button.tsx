@@ -48,7 +48,7 @@ const enQuantities = [
 const UK_LED_BONUS_THRESHOLD = 85
 
 export function AddToCartButton({ product, variant = "default", className, isFrenchVersion = false, isEnglishFlexibleAcoustic = false, isUKVersion = false, onAddedToCart }: AddToCartButtonProps) {
-  const { addItem, items } = useCart()
+  const { addItem, items, openCart } = useCart()
   const router = useRouter()
   const { toast } = useToast()
 
@@ -69,8 +69,6 @@ export function AddToCartButton({ product, variant = "default", className, isFre
   const quantityOptions = isFrenchVersion ? frQuantities : enQuantities
 
   const handleBuyNow = (overrideQty?: number, overridePrice?: number) => {
-    window.location.href = "/contact"
-    return
     // Check if cart has products with different currency
     const cartHasProducts = items.length > 0
     if (cartHasProducts) {
@@ -252,13 +250,12 @@ export function AddToCartButton({ product, variant = "default", className, isFre
         return // Don't redirect — let parent handle scroll to Order Summary
       }
 
-      // UK: Go directly to checkout (no bonus modal)
-      router.push("/checkout-uk")
+      // Keep UK purchases in the cart drawer before checkout.
+      openCart()
       return
     }
 
-    // Redirect to cart/checkout (EN only)
-    router.push("/cart")
+    openCart()
   }
 
   const displayPrice = product.salePrice || product.price
@@ -367,7 +364,8 @@ export function AddToCartButton({ product, variant = "default", className, isFre
         sessionStorage.setItem("checkout_order_uk", JSON.stringify(orderData))
       } catch (e) {}
       
-      // Show toast confirmation instead of redirect
+      // Open the cart drawer so the customer can review the added item.
+      openCart()
       toast({
         title: "Added to cart!",
         description: `${quantity} ${quantity > 1 ? "items" : "item"} added to your cart`,
@@ -408,8 +406,8 @@ export function AddToCartButton({ product, variant = "default", className, isFre
         sessionStorage.setItem("checkout_order_uk", JSON.stringify(orderData))
       } catch (e) {}
       
-      // Go directly to checkout
-      router.push("/checkout-uk")
+      // Let the customer review the cart before checkout.
+      openCart()
     }
     
     return (
