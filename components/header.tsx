@@ -2,8 +2,9 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Menu, X } from "lucide-react"
+import { Menu, ShoppingCart, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useCart } from "@/lib/cart-context"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { StringLights } from "@/components/christmas/string-lights"
 
@@ -19,6 +20,7 @@ const navigation = [
 
 export function Header() {
   const [open, setOpen] = useState(false)
+  const { totalItems, openCart } = useCart()
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full px-4 py-1 sm:px-6 lg:px-10 lg:py-2">
@@ -80,7 +82,25 @@ export function Header() {
           ))}
         </div>
 
-        <div aria-hidden="true" className="w-10" />
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="relative rounded-full bg-card hover:bg-muted"
+          aria-label={totalItems > 0 ? `Open cart, ${totalItems} ${totalItems === 1 ? "item" : "items"}` : "Open cart"}
+          aria-haspopup="dialog"
+          onClick={openCart}
+        >
+          <ShoppingCart className="h-5 w-5" aria-hidden="true" />
+          {totalItems > 0 && (
+            <span
+              aria-hidden="true"
+              className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground"
+            >
+              {totalItems > 99 ? "99+" : totalItems}
+            </span>
+          )}
+        </Button>
       </nav>
       <StringLights />
     </header>
