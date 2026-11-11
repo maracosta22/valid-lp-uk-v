@@ -1,0 +1,33 @@
+VARIANTES REAIS DA SHOPIFY
+Loja: dthzva-df.myshopify.com
+Destino configurado na LP: https://get.wooddecouk.com
+
+Correspondência confirmada por SKU e opção no catálogo da loja:
+
+PANEL-NATURAL | Natural | ID da variante: 67926344106175 | Produto: flexible-acoustic-panel
+PANEL-WALNUT | Walnut | ID da variante: 67926344138943 | Produto: flexible-acoustic-panel
+PANEL-BLACK | Black | ID da variante: 67926344171711 | Produto: flexible-acoustic-panel
+PANEL-GREY | Grey | ID da variante: 67926344204479 | Produto: flexible-acoustic-panel
+OAK-PANEL | Default Title | ID da variante: 67926344270015 | Produto: oak-slat-wall-panel
+WALNUT-PANEL | Default Title | ID da variante: 67926344302783 | Produto: walnut-acoustic-panel
+ARC-LAMP | Default Title | ID da variante: 67926344499391 | Produto: minimalist-arc-lamp
+CERAMIC-VASE | Default Title | ID da variante: 67926344532159 | Produto: organic-ceramic-vase
+LED-STANDARD | Default Title | ID da variante: 67926344564927 | Produto: recessed-led-strip-lighting
+WALL-CLEANER | Default Title | ID da variante: 67926344597695 | Produto: wall-preparation-cleaner
+STARWAX-500ML | Default Title | ID da variante: 67926344630463 | Produto: wall-preparation-cleaner-uk
+LED-UK-OFFER | Default Title | ID da variante: 67926344663231 | Produto: recessed-led-strip-lighting-uk
+XMAS-TREE-8FT | Default Title | ID da variante: 67926344695999 | Produto: 8ft-pre-lit-grand-fir-christmas-tree
+XMAS-BAUBLES-10 | Default Title | ID da variante: 67926344728767 | Produto: 10-pack-flocked-oversized-shatterproof-baubles
+XMAS-GARLAND-6FT | Default Title | ID da variante: 67926344761535 | Produto: 6ft-light-up-green-garland
+XMAS-BERRY-GARLAND | Default Title | ID da variante: 67926344794303 | Produto: pre-lit-red-berry-garland
+XMAS-LIGHTS-300 | Default Title | ID da variante: 67926344827071 | Produto: 300-bright-white-led-mains-lights
+XMAS-BERRY-WREATH | Default Title | ID da variante: 67926344859839 | Produto: real-winter-berry-wreath
+SAMPLE-TAUARI-BLACK | Tauari Black Felt | ID da variante: 67926344892607 | Produto: colour-samples
+SAMPLE-TAUARI-GREY | Tauari Grey Felt | ID da variante: 67926344925375 | Produto: colour-samples
+SAMPLE-FREIJO | Freijó | ID da variante: 67926344958143 | Produto: colour-samples
+SAMPLE-BLANCHONELLA | Blanchonella | ID da variante: 67926344990911 | Produto: colour-samples
+SAMPLE-WHITE | White | ID da variante: 67926345023679 | Produto: colour-samples
+SAMPLE-BLACK | Black | ID da variante: 67926345056447 | Produto: colour-samples
+
+24 variantes vinculadas. O ID antigo de teste foi removido da integração do carrinho.
+Todos os preços são definidos na Shopify. A LP conserva a apresentação e os valores anteriores.
