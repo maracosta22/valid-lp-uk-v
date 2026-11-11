@@ -406,8 +406,9 @@ export function AddToCartButton({ product, variant = "default", className, isFre
         sessionStorage.setItem("checkout_order_uk", JSON.stringify(orderData))
       } catch (e) {}
       
-      // Let the customer review the cart before checkout.
+      // Keep the cart visible while moving to its dedicated UK URL.
       openCart()
+      router.push("/flexible-acoustic-cart-uk")
     }
     
     return (
