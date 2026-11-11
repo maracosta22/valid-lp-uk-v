@@ -14,7 +14,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, priority = false }: ProductCardProps) {
-  const { addItem } = useCart()
+  const { addItem, openCart } = useCart()
 
   const isFlexibleAcousticPanel = product.slug === "flexible-acoustic-panel-uk"
   const isExternalImage = product.images[0]?.startsWith("http")
@@ -80,7 +80,10 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           variant="outline"
           size="icon"
           className="shrink-0 rounded-full border-border bg-card transition-colors duration-200 hover:bg-primary hover:text-primary-foreground"
-          onClick={() => addItem(product)}
+          onClick={() => {
+            addItem(product)
+            openCart()
+          }}
           aria-label={`Add ${product.name} to cart`}
         >
           <ShoppingBag className="h-4 w-4" />
