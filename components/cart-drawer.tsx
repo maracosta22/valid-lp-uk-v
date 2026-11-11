@@ -31,14 +31,14 @@ export function CartDrawer() {
     0,
   )
   const currency = items[0]?.product.currency || "GBP"
-  const suggestions = products
-    .filter(
-      (product) =>
-        product.inStock &&
-        product.currency === currency &&
-        !items.some((item) => item.product.id === product.id),
-    )
-    .slice(0, 4)
+  const hasFlexiblePanel = items.some((item) => item.product.id === "prod_UK_flexible_acoustic")
+  const ledRecommendation = products.find(
+    (product) =>
+      product.id === "prod_UK_led_strip" &&
+      product.inStock &&
+      !items.some((item) => item.product.id === product.id),
+  )
+  const suggestions = hasFlexiblePanel && currency === "GBP" && ledRecommendation ? [ledRecommendation] : []
 
   const goToCheckout = () => {
     setCartOpen(false)
