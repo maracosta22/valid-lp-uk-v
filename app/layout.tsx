@@ -2,6 +2,8 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Manrope, Cormorant_Garamond } from "next/font/google"
 import { Suspense } from "react"
+import Script from "next/script"
+import { BackRedirect } from "@/components/back-redirect"
 import { CartProvider } from "@/lib/cart-context"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
@@ -48,6 +50,13 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
+        <Script
+          src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+          strategy="afterInteractive"
+          data-utmify-prevent-xcod-sck=""
+          data-utmify-prevent-subids=""
+        />
+        <BackRedirect />
         <ScrollToTop />
         <Suspense fallback={null}>
           <CartProvider>
