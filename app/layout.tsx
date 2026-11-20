@@ -10,6 +10,7 @@ import { Footer } from "@/components/footer"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { Toaster } from "@/components/ui/toaster"
 import { CartDrawer } from "@/components/cart-drawer"
+import { BlackFridayGate } from "@/components/black-friday-gate"
 import "./globals.css"
 
 const _inter = Manrope({ subsets: ["latin"], variable: "--font-inter", weight: ["400", "500", "600", "700"] })
@@ -56,17 +57,19 @@ export default function RootLayout({
           data-utmify-prevent-xcod-sck=""
           data-utmify-prevent-subids=""
         />
-        <BackRedirect />
-        <ScrollToTop />
-        <Suspense fallback={null}>
-          <CartProvider>
-            <Header />
-            <main className="min-h-screen pt-16 lg:pt-20">{children}</main>
-            <Footer />
-            <CartDrawer />
-          </CartProvider>
-        </Suspense>
-        <Toaster />
+        <BlackFridayGate>
+          <BackRedirect />
+          <ScrollToTop />
+          <Suspense fallback={null}>
+            <CartProvider>
+              <Header />
+              <main className="min-h-screen pt-16 lg:pt-20">{children}</main>
+              <Footer />
+              <CartDrawer />
+            </CartProvider>
+          </Suspense>
+          <Toaster />
+        </BlackFridayGate>
       </body>
     </html>
   )
